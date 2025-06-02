@@ -1,4 +1,5 @@
 """This module defines a Graph class that represents a graph using vertices and edges."""
+
 from typing import Unpack
 from object import Vertex, Edge, VertexAttributes
 from validators import validate_labels
@@ -7,49 +8,49 @@ class Graph:
     """A class representing a graph, which consists of vertices and edges."""
 
     def __init__(self):
-        self.__vertices: list[Vertex] = []
+        self._vertices: list[Vertex] = []
 
     def __repr__(self) -> str:
         """Returns a string representation of the graph."""
-        if not self.__vertices:
+        if not self._vertices:
             return 'Graph is empty.'
 
         s = ''
 
-        for vertex in self.__vertices:
-            s += f'- Vertex({vertex.label}): {vertex.edges}'
+        for vertex in self._vertices:
+            s += f'- Vertex({vertex.get_label()}): {vertex.get_edges()}'
 
-            if vertex.label != self.__vertices[-1].label:
+            if vertex.get_label() != self._vertices[-1].get_label():
                 s += '\n'
 
         return s
 
-    def get_vertex(self, label: str) -> 'Vertex | None':
+    def _get_vertex(self, label: str) -> 'Vertex | None':
         """Retrieves a vertex by its label."""
-        for vertex in self.__vertices:
-            if vertex.label == label:
+        for vertex in self._vertices:
+            if vertex.get_label() == label:
                 return vertex
 
         return None
 
     def __get_src_dest(self, src: str, dest: str) -> tuple[Vertex | None, Vertex | None]:
         """Checks if both source and destination vertices exist."""
-        source_vertex = self.get_vertex(src)
-        dest_vertex = self.get_vertex(dest)
+        source_vertex = self._get_vertex(src)
+        dest_vertex = self._get_vertex(dest)
 
         return (source_vertex, dest_vertex)
 
     @validate_labels('label')
     def add_vertex(self, label: str):
         """Adds a vertex with the given label to the graph."""
-        if self.get_vertex(label) is None:
+        if self._get_vertex(label) is None:
             vertex = Vertex(label)
-            self.__vertices.append(vertex)
+            self._vertices.append(vertex)
 
     @validate_labels('vertex_label')
     def update_vertex(self, vertex_label: str, **kwargs: Unpack[VertexAttributes]):
         """Updates the properties of a vertex."""
-        vertex = self.get_vertex(vertex_label)
+        vertex = self._get_vertex(vertex_label)
 
         if vertex is None:
             return
@@ -85,7 +86,7 @@ class Graph:
         if source_vertex is None or dest_vertex is None:
             return
 
-        for edge in source_vertex.edges:
+        for edge in source_vertex.get_edges():
             if edge.destination == dest_vertex:
                 edge.update_weight(new_weight)
                 return
