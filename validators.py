@@ -7,14 +7,11 @@ def validate_labels(*label_args):
             arg_names = func.__code__.co_varnames[:func.__code__.co_argcount]
             arg_map = dict(zip(arg_names, (self, *args))) | kwargs
 
-            if 'edges' in arg_map:
-                return None
-
             for label in label_args:
                 value = arg_map.get(label)
 
                 if not isinstance(value, str) or not value.isalpha() or len(value) == 0:
-                    return None
+                    raise ValueError(f"Invalid label: '{value}' for argument '{label}'")
 
             return func(self, *args, **kwargs)
         return wrapper

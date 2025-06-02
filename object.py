@@ -45,7 +45,7 @@ class Vertex:
     def update_attributes(self, **kwargs: Unpack[VertexAttributes]):
         """Updates the properties of the vertex."""
         if '__edges' in kwargs:
-            return
+            raise ValueError("Cannot update edges directly.")
 
         for key, value in kwargs.items():
             attribute_key = f"_{self.__class__.__name__}__{key}"
@@ -92,6 +92,6 @@ class Edge:
     def update_weight(self, new_weight: int):
         """Updates the weight of the edge."""
         if new_weight < 0:
-            return
+            raise ValueError("Weight cannot be negative.")
 
         self.weight = new_weight

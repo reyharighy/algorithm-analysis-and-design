@@ -13,6 +13,7 @@ class Graph:
     def __repr__(self) -> str:
         """Returns a string representation of the graph."""
         if not self._vertices:
+            # If there are no vertices, return a message indicating that.
             return 'Graph is empty.'
 
         s = ''
@@ -53,7 +54,7 @@ class Graph:
         vertex = self._get_vertex(vertex_label)
 
         if vertex is None:
-            return
+            raise ValueError(f"Vertex with label '{vertex_label}' does not exist.")
 
         vertex.update_attributes(**kwargs)
 
@@ -63,7 +64,7 @@ class Graph:
         source_vertex, dest_vertex = self.__get_src_dest(source_label, dest_label)
 
         if not source_vertex or not dest_vertex:
-            return
+            raise ValueError(f"'{source_label}' or '{dest_label}' do not exist.")
 
         from_src: Edge | None = None
 
@@ -74,7 +75,7 @@ class Graph:
             from_dest = Edge(dest_vertex, source_vertex, weight[1])
             dest_vertex.add_edge(from_dest)
         else:
-            return
+            raise ValueError("It should be a positive integer or a tuple of two positive integers.")
 
         source_vertex.add_edge(from_src)
 
@@ -84,7 +85,7 @@ class Graph:
         source_vertex, dest_vertex = self.__get_src_dest(source_label, dest_label)
 
         if source_vertex is None or dest_vertex is None:
-            return
+            raise ValueError(f"'{source_label}' or '{dest_label}' do not exist.")
 
         for edge in source_vertex.get_edges():
             if edge.destination == dest_vertex:

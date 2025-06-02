@@ -59,7 +59,7 @@ class BreadthFirstSearch(Graph):
         start_vertex = self._get_vertex(start_label)
 
         if start_vertex is None:
-            return
+            raise ValueError(f"Vertex with label '{start_label}' does not exist.")
 
         self.__reset()
 
