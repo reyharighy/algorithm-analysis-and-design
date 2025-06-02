@@ -16,29 +16,6 @@ class BreadthFirstSearch(Graph):
         """Returns a string representation of the graph."""
         return "BreadthFirstSearch:\n" + super().__repr__()
 
-    def create_graph_from_problem_statement(self):
-        """Creates a graph from a problem statement."""
-
-        for i in range(65, 75):
-            self.add_vertex(chr(i))
-
-        edge_dictionary = {
-            'A': ['B', 'D', 'E'],
-            'B': ['C'],
-            'C': ['G', 'H'],
-            'D': ['F'],
-            'E': ['D', 'F'],
-            'F': ['J'],
-            'G': [],
-            'H': ['G'],
-            'I': ['G', 'H'],
-            'J': [],
-        }
-
-        for source, dest in edge_dictionary.items():
-            for d in dest:
-                self.add_edge(source, d)
-
     def __reset(self):
         """Resets the graph's vertices to their initial state."""
         for vertex in self._vertices:

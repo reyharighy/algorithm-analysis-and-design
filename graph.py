@@ -91,3 +91,34 @@ class Graph:
             if edge.destination == dest_vertex:
                 edge.update_weight(new_weight)
                 return
+
+    def create_graph_from_problem_statement(self, task_number: int):
+        """Creates a graph from a problem statement."""
+
+        match task_number:
+            case 1:
+                self.__create_graph_task_1()
+            case _:
+                raise ValueError("Invalid task number")
+
+    def __create_graph_task_1(self):
+        """Creates a graph for task 1."""
+        for i in range(65, 75):
+            self.add_vertex(chr(i))
+
+        edge_dictionary = {
+            'A': ['B', 'D', 'E'],
+            'B': ['C'],
+            'C': ['G', 'H'],
+            'D': ['F'],
+            'E': ['D', 'F'],
+            'F': ['J'],
+            'G': [],
+            'H': ['G'],
+            'I': ['G', 'H'],
+            'J': [],
+        }
+
+        for source, dest in edge_dictionary.items():
+            for d in dest:
+                self.add_edge(source, d)

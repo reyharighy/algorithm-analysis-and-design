@@ -3,7 +3,7 @@
 from breadth_first_search import BreadthFirstSearch
 
 bfs = BreadthFirstSearch()
-bfs.create_graph_from_problem_statement()
+bfs.create_graph_from_problem_statement(1)
 
 for vertex in bfs.get_vertices():
     print(vertex)
