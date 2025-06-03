@@ -16,20 +16,6 @@ class BreadthFirstSearch(Graph):
         """Returns a string representation of the graph."""
         return "BreadthFirstSearch:\n" + super().__repr__()
 
-    def __reset(self):
-        """Resets the graph's vertices to their initial state."""
-        for vertex in self._vertices:
-            vertex.update_attributes(
-                predecessor=None,
-                distance=float('inf'),
-                visited=False,
-                color='white'
-            )
-
-    def get_vertices(self) -> list['Vertex']:
-        """Returns the list of vertices in the graph."""
-        return self._vertices
-
     @validate_labels('start_label')
     def run(self, start_label: str):
         """Performs breadth-first search starting from the given vertex label."""
@@ -38,13 +24,10 @@ class BreadthFirstSearch(Graph):
         if start_vertex is None:
             raise ValueError(f"Vertex with label '{start_label}' does not exist.")
 
-        self.__reset()
+        self._reset('bfs')
 
-        start_vertex.update_attributes(
-            distance=0,
-            visited=True,
-            color='red'
-        )
+        start_vertex.update_default_attributes(color='red')
+        start_vertex.update_bfs_attributes(distance=0)
 
         self.__queue.append(start_vertex)
 
@@ -53,13 +36,13 @@ class BreadthFirstSearch(Graph):
 
             for neighbor in head.get_neighbors():
                 if neighbor.get_color() == 'white':
-                    neighbor.update_attributes(
-                        predecessor=head,
-                        distance= head.get_distance() + 1,
-                        visited=True,
-                        color='red'
-                    )
-
+                    neighbor.update_default_attributes(color='red', predecessor=head)
+                    neighbor.update_bfs_attributes(distance=head.get_distance() + 1)
                     self.__queue.append(neighbor)
 
-            head.update_attributes(color='blue')
+            head.update_default_attributes(color='blue')
+
+    # omit for later use
+    def get_vertices(self) -> list[Vertex]:
+        """Returns the list of vertices in the graph."""
+        return self._get_vertices()
