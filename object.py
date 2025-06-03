@@ -2,6 +2,7 @@
 
 from typing import TypedDict, Unpack
 from dataclasses import dataclass
+from validators import validate_labels
 
 class VertexDefaultAttributes(TypedDict, total=False):
     """A TypedDict for vertex attributes."""
@@ -32,6 +33,7 @@ class DFSAttributes:
 class Vertex:
     """A class representing a vertex in a graph."""
 
+    @validate_labels('label')
     def __init__(self, label: str):
         # Default attributes in Basic Graph
         self.__label: str = label
@@ -130,6 +132,7 @@ class Vertex:
 class Edge:
     """A class representing an edge in a graph."""
 
+    @validate_labels('source', 'destination')
     def __init__(self, source: Vertex, destination: Vertex, weight: int = 1):
         self.source: Vertex = source
         self.destination: Vertex = destination

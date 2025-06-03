@@ -30,6 +30,7 @@ class Graph:
         """Returns the list of vertices in the graph."""
         return self.__vertices
 
+    @validate_labels('label')
     def _get_vertex(self, label: str) -> 'Vertex | None':
         """Retrieves a vertex by its label."""
         for vertex in self.__vertices:
@@ -38,6 +39,7 @@ class Graph:
 
         return None
 
+    @validate_labels('src', 'dest')
     def __get_src_dest(self, src: str, dest: str) -> tuple[Vertex | None, Vertex | None]:
         """Checks if both source and destination vertices exist."""
         source_vertex = self._get_vertex(src)
@@ -51,16 +53,6 @@ class Graph:
         if self._get_vertex(label) is None:
             vertex = Vertex(label)
             self.__vertices.append(vertex)
-
-    @validate_labels('vertex_label')
-    def update_vertex(self, vertex_label: str, **kwargs: Unpack[VertexDefaultAttributes]):
-        """Updates the properties of a vertex."""
-        vertex = self._get_vertex(vertex_label)
-
-        if vertex is None:
-            raise ValueError(f"Vertex with label '{vertex_label}' does not exist.")
-
-        vertex.update_default_attributes(**kwargs)
 
     @validate_labels('source_label', 'dest_label')
     def add_edge(self, source_label: str, dest_label: str, weight: int | tuple[int, int] = 1):
@@ -82,19 +74,6 @@ class Graph:
             raise ValueError("It should be a positive integer or a tuple of two positive integers.")
 
         source_vertex.add_edge(from_src)
-
-    @validate_labels('source_label', 'dest_label')
-    def update_edge(self, source_label: str, dest_label: str, new_weight: int):
-        """Updates the properties of an edge between two vertices."""
-        source_vertex, dest_vertex = self.__get_src_dest(source_label, dest_label)
-
-        if source_vertex is None or dest_vertex is None:
-            raise ValueError(f"'{source_label}' or '{dest_label}' do not exist.")
-
-        for edge in source_vertex.get_edges():
-            if edge.destination == dest_vertex:
-                edge.update_weight(new_weight)
-                return
 
     def _reset(self, include: str):
         """Resets the graph's vertices to their initial state."""
@@ -140,3 +119,28 @@ class Graph:
         for source, dest in edge_dictionary.items():
             for d in dest:
                 self.add_edge(source, d)
+
+    # Unused methods
+    @validate_labels('vertex_label')
+    def update_vertex(self, vertex_label: str, **kwargs: Unpack[VertexDefaultAttributes]):
+        """Updates the properties of a vertex."""
+        vertex = self._get_vertex(vertex_label)
+
+        if vertex is None:
+            raise ValueError(f"Vertex with label '{vertex_label}' does not exist.")
+
+        vertex.update_default_attributes(**kwargs)
+
+    # Unused methods
+    @validate_labels('source_label', 'dest_label')
+    def update_edge(self, source_label: str, dest_label: str, new_weight: int):
+        """Updates the properties of an edge between two vertices."""
+        source_vertex, dest_vertex = self.__get_src_dest(source_label, dest_label)
+
+        if source_vertex is None or dest_vertex is None:
+            raise ValueError(f"'{source_label}' or '{dest_label}' do not exist.")
+
+        for edge in source_vertex.get_edges():
+            if edge.destination == dest_vertex:
+                edge.update_weight(new_weight)
+                return

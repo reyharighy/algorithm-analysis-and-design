@@ -8,9 +8,12 @@ def validate_labels(*label_args):
             arg_map = dict(zip(arg_names, (self, *args))) | kwargs
 
             for label in label_args:
-                value = arg_map.get(label)
+                value: str | None = arg_map.get(label)
 
-                if not isinstance(value, str) or not value.isalpha() or len(value) == 0:
+                if value is None:
+                    raise ValueError(f"Label cannot be empty for argument '{label}'")
+
+                if not isinstance(value, str) or not value.isalpha():
                     raise ValueError(f"Invalid label: '{value}' for argument '{label}'")
 
             return func(self, *args, **kwargs)
