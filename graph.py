@@ -1,34 +1,38 @@
 """This module defines a Graph class that represents a graph using vertices and edges."""
 
 from typing import Unpack
-from object import Vertex, Edge, VertexAttributes
+from object import Vertex, Edge, VertexDefaultAttributes
 from validators import validate_labels
 
 class Graph:
     """A class representing a graph, which consists of vertices and edges."""
 
     def __init__(self):
-        self._vertices: list[Vertex] = []
+        self.__vertices: list[Vertex] = []
 
     def __repr__(self) -> str:
         """Returns a string representation of the graph."""
-        if not self._vertices:
+        if not self.__vertices:
             # If there are no vertices, return a message indicating that.
             return 'Graph is empty.'
 
         s = ''
 
-        for vertex in self._vertices:
+        for vertex in self.__vertices:
             s += f'- Vertex({vertex.get_label()}): {vertex.get_edges()}'
 
-            if vertex.get_label() != self._vertices[-1].get_label():
+            if vertex.get_label() != self.__vertices[-1].get_label():
                 s += '\n'
 
         return s
 
+    def _get_vertices(self) -> list[Vertex]:
+        """Returns the list of vertices in the graph."""
+        return self.__vertices
+
     def _get_vertex(self, label: str) -> 'Vertex | None':
         """Retrieves a vertex by its label."""
-        for vertex in self._vertices:
+        for vertex in self.__vertices:
             if vertex.get_label() == label:
                 return vertex
 
@@ -46,17 +50,17 @@ class Graph:
         """Adds a vertex with the given label to the graph."""
         if self._get_vertex(label) is None:
             vertex = Vertex(label)
-            self._vertices.append(vertex)
+            self.__vertices.append(vertex)
 
     @validate_labels('vertex_label')
-    def update_vertex(self, vertex_label: str, **kwargs: Unpack[VertexAttributes]):
+    def update_vertex(self, vertex_label: str, **kwargs: Unpack[VertexDefaultAttributes]):
         """Updates the properties of a vertex."""
         vertex = self._get_vertex(vertex_label)
 
         if vertex is None:
             raise ValueError(f"Vertex with label '{vertex_label}' does not exist.")
 
-        vertex.update_attributes(**kwargs)
+        vertex.update_default_attributes(**kwargs)
 
     @validate_labels('source_label', 'dest_label')
     def add_edge(self, source_label: str, dest_label: str, weight: int | tuple[int, int] = 1):
@@ -92,6 +96,20 @@ class Graph:
                 edge.update_weight(new_weight)
                 return
 
+    def _reset(self, include: str):
+        """Resets the graph's vertices to their initial state."""
+        for vertex in self.__vertices:
+            vertex.update_default_attributes(
+                predecessor=None,
+                color='white'
+            )
+
+            match include:
+                case 'bfs':
+                    vertex.update_bfs_attributes(
+                        distance=float('inf')
+                    )
+
     def create_graph_from_problem_statement(self, task_number: int):
         """Creates a graph from a problem statement."""
 
@@ -108,7 +126,7 @@ class Graph:
 
         edge_dictionary = {
             'A': ['B', 'D', 'E'],
-            'B': ['C'],
+            'B': ['C', 'D'],
             'C': ['G', 'H'],
             'D': ['F'],
             'E': ['D', 'F'],
