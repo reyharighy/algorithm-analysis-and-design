@@ -85,9 +85,14 @@ class Graph:
 
             match include:
                 case 'bfs':
-                    vertex.update_bfs_attributes(
-                        distance=float('inf')
+                    vertex.update_bfs_attributes(distance=float('inf'))
+                case 'dfs':
+                    vertex.update_dfs_attributes(
+                        discovery_time=0,
+                        finish_time=0
                     )
+                case _:
+                    raise ValueError(f'{include} is incorrect value for parameter include')
 
     def create_graph_from_problem_statement(self, task_number: int):
         """Creates a graph from a problem statement."""
