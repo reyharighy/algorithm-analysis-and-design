@@ -132,7 +132,6 @@ class Vertex:
 class Edge:
     """A class representing an edge in a graph."""
 
-    @validate_labels('source', 'destination')
     def __init__(self, source: Vertex, destination: Vertex, weight: int = 1):
         self.source: Vertex = source
         self.destination: Vertex = destination
