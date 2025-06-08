@@ -19,3 +19,15 @@ def validate_labels(*label_args):
             return func(self, *args, **kwargs)
         return wrapper
     return decorator
+
+def validate_keyword_params(keyword_args):
+    """Decorator to prevent alteration on the attribute if one keyword parameter does not exist"""
+    def decorator(func):
+        def wrapper(self, *args, **kwargs):
+            for key in kwargs:
+                if key not in keyword_args:
+                    raise AttributeError(f"Invalid parameter: {key}")
+
+            return func(self, *args, **kwargs)
+        return wrapper
+    return decorator

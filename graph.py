@@ -1,7 +1,6 @@
 """This module defines a Graph class that represents a graph using vertices and edges."""
 
-from typing import Unpack
-from object import Vertex, Edge, VertexDefaultAttributes
+from object import Vertex, Edge
 from validators import validate_labels
 
 class Graph:
@@ -25,10 +24,6 @@ class Graph:
                 s += '\n'
 
         return s
-
-    def _get_vertices(self) -> list[Vertex]:
-        """Returns the list of vertices in the graph."""
-        return self.__vertices
 
     @validate_labels('label')
     def _get_vertex(self, label: str) -> 'Vertex | None':
@@ -125,27 +120,15 @@ class Graph:
             for d in dest:
                 self.add_edge(source, d)
 
-    # Unused methods
-    @validate_labels('vertex_label')
-    def update_vertex(self, vertex_label: str, **kwargs: Unpack[VertexDefaultAttributes]):
-        """Updates the properties of a vertex."""
-        vertex = self._get_vertex(vertex_label)
+    def _get_vertices(self) -> list[Vertex]:
+        """Returns the list of vertices in the graph."""
+        return self.__vertices
 
-        if vertex is None:
-            raise ValueError(f"Vertex with label '{vertex_label}' does not exist.")
+    def _get_edges(self) -> list['Edge']:
+        """Returns the list of edge in the graph"""
+        edges: list[Edge] = []
 
-        vertex.update_default_attributes(**kwargs)
+        for vertex in self.__vertices:
+            edges.extend(vertex.get_edges())
 
-    # Unused methods
-    @validate_labels('source_label', 'dest_label')
-    def update_edge(self, source_label: str, dest_label: str, new_weight: int):
-        """Updates the properties of an edge between two vertices."""
-        source_vertex, dest_vertex = self.__get_src_dest(source_label, dest_label)
-
-        if source_vertex is None or dest_vertex is None:
-            raise ValueError(f"'{source_label}' or '{dest_label}' do not exist.")
-
-        for edge in source_vertex.get_edges():
-            if edge.destination == dest_vertex:
-                edge.update_weight(new_weight)
-                return
+        return edges
