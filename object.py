@@ -95,6 +95,9 @@ class Vertex:
     def get_finish_time(self) -> int | float:
         """Returns the DFS finish time of the vertex."""
         return self.__dfs_vertex_attributes.finish_time
+    
+    def get_dijkstra_distance(self) -> float:
+        return self.__dijkstra_distance
 
     # -------------------------------------------------------------------------------
     # END
@@ -146,6 +149,9 @@ class Vertex:
     def get_neighbors(self) -> list['Vertex']:
         """Returns a list of neighboring vertices. Used specifically when traversing the graph."""
         return [edge.get_destination() for edge in self.__edges]
+    
+    def set_dijkstra_distance(self, distance: float):
+        self.__dijkstra_distance = distance
 
     # -------------------------------------------------------------------------------
     # END
@@ -175,6 +181,9 @@ class Edge:
         # DFS-specific attributes
         self.__dfs_edge_attributes: DFSEdgeAttributes = DFSEdgeAttributes()
 
+        # Dijkstra-specific attributes
+        self.__dijkstra_distance = float('inf')
+        
     def __repr__(self) -> str:
         """Returns a string representation of the edge."""
         s = f"Edge({self.__source.get_label()}"
