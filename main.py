@@ -2,6 +2,7 @@
 
 from breadth_first_search import BreadthFirstSearch
 from depth_first_search import DepthFirstSearch
+from dijkstra import Dijkstra
 
 bfs = BreadthFirstSearch()
 bfs.create_graph_from_problem_statement(1)
@@ -44,3 +45,13 @@ for vertex in dfs.get_vertices():
     S += "}})"
 
     print(S)
+
+dijkstra = Dijkstra()
+dijkstra.create_graph_from_problem_statement(3)
+dijkstra.run('S')
+
+print("\nAfter Dijkstra traversal:")
+for vertex in dijkstra.get_vertices():
+    print(vertex, f"({{distance: {vertex.get_dijkstra_distance()}}})")
+    
+dijkstra.visualize()

@@ -95,6 +95,10 @@ class Graph:
         match task_number:
             case 1:
                 self.__create_graph_task_1()
+            case 2:
+                self.__create_graph_task_2()
+            case 3:
+                self.__create_graph_task_3()
             case _:
                 raise ValueError("Invalid task number")
 
@@ -119,6 +123,22 @@ class Graph:
         for source, dest in edge_dictionary.items():
             for d in dest:
                 self.add_edge(source, d)
+    
+    def __create_graph_task_3(self):
+        """Creates a graph for task 3 with weighted edges for Dijkstra."""
+        for label in ['S', 'U', 'X', 'V', 'Y']:
+            self.add_vertex(label)
+
+        self.add_edge('S', 'U', 10)
+        self.add_edge('S', 'X', 5)
+        self.add_edge('Y', 'S', 7)
+        self.add_edge('U', 'V', 1)
+        self.add_edge('U', 'X', 2)
+        self.add_edge('X', 'U', 3)
+        self.add_edge('X', 'V', 9)
+        self.add_edge('X', 'Y', 2)
+        self.add_edge('Y', 'V', 6)
+        self.add_edge('V', 'Y', 4)
 
     def _get_vertices(self) -> list[Vertex]:
         """Returns the list of vertices in the graph."""
