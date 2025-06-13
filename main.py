@@ -3,7 +3,12 @@
 from breadth_first_search import BreadthFirstSearch
 from depth_first_search import DepthFirstSearch
 from dijkstra import Dijkstra
+from prim import prim
+from kruskal import kruskal
+from graph import Graph
+from visualize import visualize_dijkstra, visualize_mst
 
+# Run Breadth-First Search (BFS)
 bfs = BreadthFirstSearch()
 bfs.create_graph_from_problem_statement(1)
 
@@ -19,6 +24,7 @@ for vertex in bfs.get_vertices():
     print(vertex, end=' ')
     print(f"({{distance: {vertex.get_distance()}}})")
 
+# Run Depth-First Search (DFS)
 dfs = DepthFirstSearch()
 dfs.create_graph_from_problem_statement(1)
 
@@ -26,10 +32,7 @@ print("\nBefore DFS traversal:")
 for vertex in dfs.get_vertices():
     print(vertex, end=' ')
 
-    S = "({{"
-    S += f"discovery_time: {vertex.get_discovery_time()}, "
-    S += f"finish_time: {vertex.get_finish_time()}"
-    S += "}})"
+    S = f"(discovery_time: {vertex.get_discovery_time()}, finish_time: {vertex.get_finish_time()})"
 
     print(S)
 
@@ -39,13 +42,11 @@ print("\nAfter DFS traversal:")
 for vertex in dfs.get_vertices():
     print(vertex, end=' ')
 
-    S = "({{"
-    S += f"discovery_time: {vertex.get_discovery_time()}, "
-    S += f"finish_time: {vertex.get_finish_time()}"
-    S += "}})"
+    S = f"(discovery_time: {vertex.get_discovery_time()}, finish_time: {vertex.get_finish_time()})"
 
     print(S)
 
+# Run Djikstra's algorithm
 dijkstra = Dijkstra()
 dijkstra.create_graph_from_problem_statement(3)
 dijkstra.run('S')
@@ -54,4 +55,24 @@ print("\nAfter Dijkstra traversal:")
 for vertex in dijkstra.get_vertices():
     print(vertex, f"({{distance: {vertex.get_dijkstra_distance()}}})")
     
-dijkstra.visualize()
+visualize_dijkstra(dijkstra.graph)
+
+# Run Prim's and Kruskal's algorithms
+mst = Graph()
+mst.create_graph_from_problem_statement(2)
+
+prim_edges = prim(mst)
+kruskal_edges = kruskal(mst)
+
+print("\nPrim's MST:")
+for edge in prim_edges:
+    print(edge)
+
+print("\nKruskal's MST:")
+for edge in kruskal_edges:
+    print(edge)
+    
+print()
+
+visualize_mst(prim_edges, "Prim's Minimum Spanning Tree")
+visualize_mst(kruskal_edges, "Kruskal's Minimum Spanning Tree")

@@ -123,6 +123,27 @@ class Graph:
         for source, dest in edge_dictionary.items():
             for d in dest:
                 self.add_edge(source, d)
+                
+    def __create_graph_task_2(self):
+        """Creates a graph for task 2 with weighted edges for Prim's and Kruskal's algorithms."""
+        for label in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
+            self.add_vertex(label)
+
+        edges = [
+            ('A', 'C', 4), ('A', 'E', 14),
+            ('C', 'D', 4), ('C', 'K', 20),
+            ('D', 'E', 7), ('D', 'F', 9),
+            ('F', 'G', 8), ('F', 'K', 11), 
+            ('E', 'G', 12),
+            ('G', 'H', 11),
+            ('H', 'K', 15), ('H', 'J', 7), ('H', 'I', 4),
+            ('K', 'J', 7),
+            ('I', 'B', 3), ('I', 'J', 5),
+            ('B', 'J', 7)
+        ]
+
+        for src, dest, weight in edges:
+            self.add_edge(src, dest, (weight, weight))
     
     def __create_graph_task_3(self):
         """Creates a graph for task 3 with weighted edges for Dijkstra."""
