@@ -3,7 +3,7 @@
 from typing import TypedDict, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from object import Vertex
+    from tools.api.object import Vertex
 
 class DefaultVertexType(TypedDict, total=False):
     """A TypedDict for default vertex attributes."""

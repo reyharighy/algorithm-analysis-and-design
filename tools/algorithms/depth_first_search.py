@@ -1,7 +1,7 @@
 """A module to perform depth-first search on a graph."""
 
-from graph import Graph
-from object import Vertex
+from tools.api.graph import Graph
+from tools.api.object import Vertex
 from helper.validators import validate_labels
 
 class DepthFirstSearch(Graph):

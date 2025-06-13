@@ -1,8 +1,8 @@
 """A module to perform breadth-first search on a graph."""
 
 from collections import deque
-from graph import Graph
-from object import Vertex
+from tools.api.graph import Graph
+from tools.api.object import Vertex
 from helper.validators import validate_labels
 
 class BreadthFirstSearch(Graph):

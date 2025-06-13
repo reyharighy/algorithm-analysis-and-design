@@ -1,8 +1,8 @@
 """Main module to run the graph operations."""
 
-from breadth_first_search import BreadthFirstSearch
-from depth_first_search import DepthFirstSearch
-from dijkstra import DijkstraSearch
+from tools.algorithms.breadth_first_search import BreadthFirstSearch
+from tools.algorithms.depth_first_search import DepthFirstSearch
+from tools.algorithms.dijkstra import DijkstraSearch
 
 bfs = BreadthFirstSearch()
 bfs.create_graph_from_problem_statement(1)

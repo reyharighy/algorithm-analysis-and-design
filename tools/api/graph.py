@@ -1,6 +1,6 @@
 """This module defines a Graph class that represents a graph using vertices and edges."""
 
-from object import Vertex, Edge
+from tools.api.object import Vertex, Edge
 from helper.validators import validate_labels
 
 class Graph:
