@@ -2,8 +2,8 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
-from object import Edge
-from graph import Graph
+from tools.api.object import Edge
+from tools.api.graph import Graph
 
 def visualize_mst(mst_edges: list[Edge], title="Minimum Spanning Tree"):
     G = nx.Graph()

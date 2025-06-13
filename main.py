@@ -1,12 +1,11 @@
 """Main module to run the graph operations."""
 
-from breadth_first_search import BreadthFirstSearch
-from depth_first_search import DepthFirstSearch
-from dijkstra import Dijkstra
-from prim import prim
-from kruskal import kruskal
-from graph import Graph
-from visualize import visualize_dijkstra, visualize_mst
+from tools.algorithms.breadth_first_search import BreadthFirstSearch
+from tools.algorithms.depth_first_search import DepthFirstSearch
+from tools.algorithms.dijkstra import DijkstraSearch
+from tools.api.graph import Graph
+from tools.algorithms.prim import prim
+from tools.algorithms.kruskal import kruskal
 
 # Run Breadth-First Search (BFS)
 bfs = BreadthFirstSearch()
@@ -46,33 +45,58 @@ for vertex in dfs.get_vertices():
 
     print(S)
 
-# Run Djikstra's algorithm
-dijkstra = Dijkstra()
+dijkstra = DijkstraSearch()
 dijkstra.create_graph_from_problem_statement(3)
+
+print("\nBefore Dijkstra traversal:")
+for vertex in dijkstra.get_vertices():
+    print(vertex, end=" ")
+    print(f"({{distance: {vertex.get_distance()}}})")
+
 dijkstra.run('S')
 
 print("\nAfter Dijkstra traversal:")
-for vertex in dijkstra.get_vertices():
-    print(vertex, f"({{distance: {vertex.get_dijkstra_distance()}}})")
-    
-visualize_dijkstra(dijkstra.graph)
+for vertex in dijkstra.get_single_source():
+    print(vertex, end=" ")
+    print(f"({{distance: {vertex.get_distance()}}})")
 
-# Run Prim's and Kruskal's algorithms
-mst = Graph()
-mst.create_graph_from_problem_statement(2)
+# -------------------------------------------------------------------------------
+# --- Prim's Algorithm (Task 2) ---
+# -------------------------------------------------------------------------------
+print("\n--- Prim's Algorithm (Task 2) ---")
+prim_graph = Graph()
+# Pastikan __create_graph_task_2 sudah ditambahkan ke `graph.py`
+prim_graph.create_graph_from_problem_statement(2)
 
-prim_edges = prim(mst)
-kruskal_edges = kruskal(mst)
+print("Running Prim's algorithm to find MST...\n")
+mst_prim = prim(prim_graph, start_label='A')
 
-print("\nPrim's MST:")
-for edge in prim_edges:
-    print(edge)
+total_weight_prim = 0
+print("Edges in MST (Prim):")
+for edge in mst_prim:
+    print(f"- {edge}")
+    total_weight_prim += edge.get_weight()
 
-print("\nKruskal's MST:")
-for edge in kruskal_edges:
-    print(edge)
-    
-print()
+print(f"\nTotal weight of MST (Prim): {total_weight_prim}")
+print("-" * 50)
 
-visualize_mst(prim_edges, "Prim's Minimum Spanning Tree")
-visualize_mst(kruskal_edges, "Kruskal's Minimum Spanning Tree")
+
+# -------------------------------------------------------------------------------
+# --- Kruskal's Algorithm (Task 2) ---
+# -------------------------------------------------------------------------------
+print("\n--- Kruskal's Algorithm (Task 2) ---")
+kruskal_graph = Graph()
+# Pastikan __create_graph_task_2 sudah ditambahkan ke `graph.py`
+kruskal_graph.create_graph_from_problem_statement(2)
+
+print("Running Kruskal's algorithm to find MST...\n")
+mst_kruskal = kruskal(kruskal_graph)
+
+total_weight_kruskal = 0
+print("Edges in MST (Kruskal):")
+for edge in mst_kruskal:
+    print(f"- {edge}")
+    total_weight_kruskal += edge.get_weight()
+
+print(f"\nTotal weight of MST (Kruskal): {total_weight_kruskal}")
+print("-" * 50)
