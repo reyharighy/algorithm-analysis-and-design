@@ -24,6 +24,10 @@ class Graph:
 
         return s
 
+    def _get_vertices(self) -> list[Vertex]:
+        """Returns the list of vertices in the graph."""
+        return self.__vertices
+
     @validate_labels('label')
     def _get_vertex(self, label: str) -> 'Vertex | None':
         """Retrieves a vertex by its label."""
@@ -32,14 +36,6 @@ class Graph:
                 return vertex
 
         return None
-
-    @validate_labels('src', 'dest')
-    def __get_src_dest(self, src: str, dest: str) -> tuple[Vertex | None, Vertex | None]:
-        """Checks if both source and destination vertices exist."""
-        source_vertex = self._get_vertex(src)
-        dest_vertex = self._get_vertex(dest)
-
-        return (source_vertex, dest_vertex)
 
     @validate_labels('label')
     def __add_vertex(self, label: str):
@@ -51,7 +47,8 @@ class Graph:
     @validate_labels('source_label', 'dest_label')
     def __add_edge(self, source_label: str, dest_label: str, weight: int | tuple[int, int] = 1):
         """Adds an edge between two vertices in the graph."""
-        source_vertex, dest_vertex = self.__get_src_dest(source_label, dest_label)
+        source_vertex = self._get_vertex(source_label)
+        dest_vertex = self._get_vertex(dest_label)
 
         if not source_vertex or not dest_vertex:
             raise ValueError(f"'{source_label}' or '{dest_label}' do not exist.")
@@ -133,7 +130,3 @@ class Graph:
         for source, dest in edge_dictionary.items():
             for d, w in dest:
                 self.__add_edge(source, d, w)
-
-    def _get_vertices(self) -> list[Vertex]:
-        """Returns the list of vertices in the graph."""
-        return self.__vertices
