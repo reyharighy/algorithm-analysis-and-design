@@ -3,7 +3,7 @@
 from collections import deque
 from graph import Graph
 from object import Vertex
-from validators import validate_labels
+from helper.validators import validate_labels
 
 class BreadthFirstSearch(Graph):
     """A class to perform breadth-first search on a graph."""

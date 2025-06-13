@@ -2,7 +2,7 @@
 
 from graph import Graph
 from object import Vertex
-from validators import validate_labels
+from helper.validators import validate_labels
 
 class DepthFirstSearch(Graph):
     """A class to perform depth-first search on a graph."""

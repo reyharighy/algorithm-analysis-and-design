@@ -1,4 +1,4 @@
-"""A module to help validate labels of vertices and edges in a graph."""
+"""A module to help validate functions in a decorator-way."""
 
 def validate_labels(*label_args):
     """Decorator to validate labels of vertices and edges."""
@@ -20,7 +20,7 @@ def validate_labels(*label_args):
         return wrapper
     return decorator
 
-def validate_keyword_params(keyword_args):
+def validate_param_keyword(keyword_args):
     """Decorator to prevent alteration on the attribute if one keyword parameter does not exist"""
     def decorator(func):
         def wrapper(self, *args, **kwargs):

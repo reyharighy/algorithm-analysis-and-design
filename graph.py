@@ -1,7 +1,7 @@
 """This module defines a Graph class that represents a graph using vertices and edges."""
 
 from object import Vertex, Edge
-from validators import validate_labels
+from helper.validators import validate_labels
 
 class Graph:
     """A class representing a graph, which consists of vertices and edges."""
@@ -12,7 +12,6 @@ class Graph:
     def __repr__(self) -> str:
         """Returns a string representation of the graph."""
         if not self.__vertices:
-            # If there are no vertices, return a message indicating that.
             return 'Graph is empty.'
 
         s = ''
@@ -43,14 +42,14 @@ class Graph:
         return (source_vertex, dest_vertex)
 
     @validate_labels('label')
-    def add_vertex(self, label: str):
+    def __add_vertex(self, label: str):
         """Adds a vertex with the given label to the graph."""
         if self._get_vertex(label) is None:
             vertex = Vertex(label)
             self.__vertices.append(vertex)
 
     @validate_labels('source_label', 'dest_label')
-    def add_edge(self, source_label: str, dest_label: str, weight: int | tuple[int, int] = 1):
+    def __add_edge(self, source_label: str, dest_label: str, weight: int | tuple[int, int] = 1):
         """Adds an edge between two vertices in the graph."""
         source_vertex, dest_vertex = self.__get_src_dest(source_label, dest_label)
 
@@ -73,19 +72,15 @@ class Graph:
     def _reset(self, include: str):
         """Resets the graph's vertices to their initial state."""
         for vertex in self.__vertices:
-            vertex.update_default_attributes(
-                predecessor=None,
-                color='white'
-            )
+            vertex.update_default_attributes(color='white', predecessor=None)
 
             match include:
                 case 'bfs':
                     vertex.update_bfs_attributes(distance=float('inf'))
                 case 'dfs':
-                    vertex.update_dfs_attributes(
-                        discovery_time=0,
-                        finish_time=0
-                    )
+                    vertex.update_dfs_attributes(discovery_time=0, finish_time=0)
+                case 'dijkstra':
+                    vertex.update_dijkstra_attributes(distance=float('inf'))
                 case _:
                     raise ValueError(f'{include} is incorrect value for parameter include')
 
@@ -95,8 +90,6 @@ class Graph:
         match task_number:
             case 1:
                 self.__create_graph_task_1()
-            case 2:
-                self.__create_graph_task_2()
             case 3:
                 self.__create_graph_task_3()
             case _:
@@ -105,7 +98,7 @@ class Graph:
     def __create_graph_task_1(self):
         """Creates a graph for task 1."""
         for i in range(65, 75):
-            self.add_vertex(chr(i))
+            self.__add_vertex(chr(i))
 
         edge_dictionary = {
             'A': ['B', 'D', 'E'],
@@ -122,33 +115,25 @@ class Graph:
 
         for source, dest in edge_dictionary.items():
             for d in dest:
-                self.add_edge(source, d)
-    
+                self.__add_edge(source, d)
+
     def __create_graph_task_3(self):
         """Creates a graph for task 3 with weighted edges for Dijkstra."""
         for label in ['S', 'U', 'X', 'V', 'Y']:
-            self.add_vertex(label)
+            self.__add_vertex(label)
 
-        self.add_edge('S', 'U', 10)
-        self.add_edge('S', 'X', 5)
-        self.add_edge('Y', 'S', 7)
-        self.add_edge('U', 'V', 1)
-        self.add_edge('U', 'X', 2)
-        self.add_edge('X', 'U', 3)
-        self.add_edge('X', 'V', 9)
-        self.add_edge('X', 'Y', 2)
-        self.add_edge('Y', 'V', 6)
-        self.add_edge('V', 'Y', 4)
+        edge_dictionary = {
+            'S': [('U', 10), ('X', 5)],
+            'U': [('V', 1), ('X', 2)],
+            'V': [('Y', 4)],
+            'X': [('U', 3), ('V', 9), ('Y', 2)],
+            'Y': [('S', 7), ('V', 6)]
+        }
+
+        for source, dest in edge_dictionary.items():
+            for d, w in dest:
+                self.__add_edge(source, d, w)
 
     def _get_vertices(self) -> list[Vertex]:
         """Returns the list of vertices in the graph."""
         return self.__vertices
-
-    def _get_edges(self) -> list['Edge']:
-        """Returns the list of edge in the graph"""
-        edges: list[Edge] = []
-
-        for vertex in self.__vertices:
-            edges.extend(vertex.get_edges())
-
-        return edges
