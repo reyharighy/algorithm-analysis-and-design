@@ -12,10 +12,18 @@ MAIN_MENU = """
 
 BFS_MENU = """
 \tPlease input an option number below:
-\t  1. Create a new vertex
-\t  2. Create a new edge
+\t  1. Create new vertex
+\t  2. Create new edge
+\t  3. Update a vertex
+\t  4. Update an edge
 \t  5. Create a dedicated graph
 \t  6. Back to main menu
+"""
+
+TWO_DIRECTION_EDGE = """
+\tPlease input an option number below:
+\t  1. One-direction Edge
+\t  2. Two-direction Edge
 """
 
 content_dictionary = {

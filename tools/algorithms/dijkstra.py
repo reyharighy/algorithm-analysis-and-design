@@ -19,7 +19,7 @@ class DijkstraSearch(Graph):
     @validate_labels('start_label')
     def run(self, start_label: str):
         """Performs Dijkstra search starting from the given vertex label."""
-        start_vertex = self._get_vertex(start_label)
+        start_vertex = self.get_vertex(start_label)
 
         if start_vertex is None:
             raise ValueError(f"Vertex with label '{start_label}' does not exist.")

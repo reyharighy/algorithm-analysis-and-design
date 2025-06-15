@@ -13,7 +13,7 @@ class MainProgram(BaseProgram):
 
     def start(self):
         """A section to start the main program."""
-        while not self._terminate:
+        while True:
             self._clear_screen()
 
             content = content_dictionary['main_menu']
@@ -25,12 +25,15 @@ class MainProgram(BaseProgram):
 
             self._clear_screen()
 
+            error_message = ''
+
             match option_input:
                 case 1:
                     self.__running_program = BFSProgram()
                     self.__running_program.start()
                     self.__running_program.save_exit()
                     self.deactivate_running_program()
+                    continue
                 case 2:
                     pass
                 case 3:
@@ -40,13 +43,15 @@ class MainProgram(BaseProgram):
                 case 5:
                     pass
                 case 6:
-                    self._terminate = True
+                    break
                 case None:
-                    self._append_error_message("Invalid input: Input must not be empty")
+                    error_message = "Invalid: Input must not be empty"
                 case -1:
-                    self._append_error_message("Invalid input: Only accept numeric type")
+                    error_message = "Invalid: Only accepts numerics without spaces in between"
                 case _:
-                    self._append_error_message(f"Invalid input: No option number {option_input}")
+                    error_message = f"Invalid: No option number {option_input}"
+
+            self._append_error_message(error_message)
 
     def save_exit(self):
         """Save configuration made after exiting the program."""

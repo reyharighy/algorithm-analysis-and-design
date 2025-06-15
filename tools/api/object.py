@@ -29,22 +29,22 @@ class Vertex:
         self.__special_attributes: SpecialVertexAttributes = SpecialVertexAttributes()
         self.__edges: list[Edge] = []
 
-    def __repr__(self) -> str:
+    def definition(self, algorithm: str) -> str:
         """Returns a string representation of the vertex."""
-        s = "Vertex({"
-        s += f"label: {self.__default_attributes.label}"
-        s += f", color: '{self.__default_attributes.color}'"
-        s += ", predecessor: "
+        vertex = ''
 
-        if self.__default_attributes.predecessor:
-            s += f"Vertex({self.__default_attributes.predecessor.get_label()})"
-        else:
-            s += "None"
+        vertex += f"Vertex({{label: {self.get_label()}"
+        vertex += f", color: {self.get_color()}"
+        vertex += f", predecessor: {self.get_predecessor()}"
+        vertex += f", edges: {self.get_edges()}"
 
-        s += f", edges: {self.__edges}"
-        s += "})"
+        match algorithm:
+            case 'bfs':
+                vertex += f", distance: {self.get_distance()}"
 
-        return s
+        vertex += "})"
+
+        return vertex
 
     # -------------------------------------------------------------------------------
     # List of getter functions to all attributes of a vertex
@@ -158,11 +158,11 @@ class DefaultEdgeAttributes:
     """A dataclass that's related to default attributes in an edge."""
     source: Vertex
     destination: Vertex
-    weight: int
 
 @dataclass
 class SpecialEdgeAttributes:
     """A dataclass that specifies attributes when working with the edge."""
+    weight: int
     classification: str | None = None
 
 class Edge:
@@ -171,17 +171,16 @@ class Edge:
     def __init__(self, source: Vertex, destination: Vertex, weight: int = 1):
         self.__default_attributes: DefaultEdgeAttributes = DefaultEdgeAttributes(
             source=source,
-            destination=destination,
-            weight=weight
+            destination=destination
         )
 
-        self.__special_attributes: SpecialEdgeAttributes = SpecialEdgeAttributes()
+        self.__special_attributes: SpecialEdgeAttributes = SpecialEdgeAttributes(weight)
 
     def __repr__(self) -> str:
         """Returns a string representation of the edge."""
         s = f"Edge({self.__default_attributes.source.get_label()}"
         s += f", {self.__default_attributes.destination.get_label()}"
-        s += f", {self.__default_attributes.weight})"
+        s += ')'
 
         return s
 
@@ -199,7 +198,7 @@ class Edge:
 
     def get_weight(self) -> int:
         """Returns the weight of a vertex."""
-        return self.__default_attributes.weight
+        return self.__special_attributes.weight
 
     def get_classification(self) -> str | None:
         """Returns the classification of an edge when running DFS."""

@@ -1,11 +1,7 @@
 """This module defines a Graph class that represents a graph using vertices and edges."""
 
-from typing import TYPE_CHECKING
 from tools.api.object import Vertex, Edge
 from helper.validators import validate_labels
-
-if TYPE_CHECKING:
-    from tools.algorithms.breadth_first_search import BreadthFirstSearch
 
 class Graph:
     """A class representing a graph, which consists of vertices and edges."""
@@ -13,7 +9,7 @@ class Graph:
     def __init__(self):
         self.__vertices: list[Vertex] = []
 
-    def graph_definition(self, algorithm: str) -> str:
+    def definition(self, algorithm: str) -> str:
         """Returns a string representation of the graph."""
         vertices = '\n\tGraph Definition:\n'
 
@@ -60,34 +56,27 @@ class Graph:
 
         return False
 
-    @validate_labels('source_label', 'dest_label')
-    def __add_edge(self, source_label: str, dest_label: str, weight: int | tuple[int, int] = 1):
+    def add_edge(self, source: Vertex, destination: Vertex, weight: int | tuple[int, int] = 1):
         """Adds an edge between two vertices in the graph."""
-        source_vertex = self.get_vertex(source_label)
-        dest_vertex = self.get_vertex(dest_label)
-
-        if not source_vertex or not dest_vertex:
-            raise ValueError(f"'{source_label}' or '{dest_label}' do not exist.")
-
         from_src: Edge | None = None
 
         if isinstance(weight, int) and weight > 0:
-            from_src = Edge(source_vertex, dest_vertex, weight)
-        elif isinstance(weight, tuple) and len(weight) == 2 and weight[0] > 0 and weight[1] > 0:
-            from_src = Edge(source_vertex, dest_vertex, weight[0])
-            from_dest = Edge(dest_vertex, source_vertex, weight[1])
-            dest_vertex.add_edge(from_dest)
-        else:
-            raise ValueError("It should be a positive integer or a tuple of two positive integers.")
+            from_src = Edge(source, destination, weight)
 
-        source_vertex.add_edge(from_src)
+        if isinstance(weight, tuple) and len(weight) == 2 and weight[0] > 0 and weight[1] > 0:
+            from_src = Edge(source, destination, weight[0])
+            from_dest = Edge(destination, source, weight[1])
+            destination.add_edge(from_dest)
 
-    def _reset(self, include: str):
+        if isinstance(from_src, Edge):
+            source.add_edge(from_src)
+
+    def _reset(self, algorithm: str):
         """Resets the graph's vertices to their initial state."""
         for vertex in self.__vertices:
             vertex.update_default_attributes(color='white', predecessor=None)
 
-            match include:
+            match algorithm:
                 case 'bfs':
                     vertex.update_bfs_attributes(distance=float('inf'))
                 case 'dfs':
@@ -95,7 +84,7 @@ class Graph:
                 case 'dijkstra':
                     vertex.update_dijkstra_attributes(distance=float('inf'))
                 case _:
-                    raise ValueError(f'{include} is incorrect value for parameter include')
+                    raise ValueError(f'{algorithm} is incorrect value for parameter include')
 
     def create_graph_from_problem_statement(self, task_number: int):
         """Creates a graph from a problem statement."""
@@ -128,10 +117,16 @@ class Graph:
             'J': [],
         }
 
-        for source, dest in edge_dictionary.items():
-            for d in dest:
-                self.__add_edge(source, d)
+        for source_label, destination_labels in edge_dictionary.items():
+            source = self.get_vertex(source_label)
 
+            for label in destination_labels:
+                destination = self.get_vertex(label)
+
+                if source and destination:
+                    self.add_edge(source, destination)
+
+    # need to check the implementation of this graph definition
     def __create_graph_task_2(self):
         """Creates a graph for task 2 with weighted edges."""
         for label in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
@@ -151,10 +146,13 @@ class Graph:
             'K': [],
         }
 
-        for source, dest_list in edge_dictionary.items():
-            for d, w in dest_list:
-                self.__add_edge(source, d, w)
-                self.__add_edge(d, source, w)
+        for source_label, destination_labels in edge_dictionary.items():
+            source = Vertex(source_label)
+
+            for label, weight in destination_labels:
+                destination = Vertex(label)
+                self.add_edge(source, destination, weight)
+                self.add_edge(destination=destination, source=source, weight=weight)
 
     def __create_graph_task_3(self):
         """Creates a graph for task 3 with weighted edges for Dijkstra."""
@@ -169,6 +167,11 @@ class Graph:
             'Y': [('S', 7), ('V', 6)]
         }
 
-        for source, dest in edge_dictionary.items():
-            for d, w in dest:
-                self.__add_edge(source, d, w)
+        for source_label, destination_labels in edge_dictionary.items():
+            source = self.get_vertex(source_label)
+
+            for label, weight in destination_labels:
+                destination = self.get_vertex(label)
+
+                if source and destination:
+                    self.add_edge(source, destination, weight)

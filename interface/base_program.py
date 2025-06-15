@@ -4,18 +4,26 @@ import os
 import time
 import threading
 from sys import stdout
+from dataclasses import dataclass
 from rich import print as session
+
+@dataclass
+class SubProcess:
+    """A class to provide general status when a process of subprogram is running."""
+    valid: bool = False
+    two_direction: bool = False
 
 class BaseProgram:
     """A class to provide basic operation when using a program."""
 
     def __init__(self) -> None:
-        self._terminate: bool = False
         self._animated: bool = False
         self._session_message: str = ''
         self._success_message: bool = True
         self._terminal_height: int = int(os.popen('stty size', 'r').read().split()[0])
         self._terminal_width: int = int(os.popen('stty size', 'r').read().split()[1])
+
+        self._sub: SubProcess = SubProcess()
 
     def start(self):
         """Not implemented."""
@@ -106,3 +114,7 @@ class BaseProgram:
         time.sleep(.5)
 
         self._animated = False
+
+    def _reset_sub_process(self):
+        """Resets all status to default after a process of subprogram is done."""
+        self._sub = SubProcess()

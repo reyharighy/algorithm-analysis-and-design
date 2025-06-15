@@ -11,10 +11,10 @@ def validate_labels(*label_args):
                 value: str | None = arg_map.get(label)
 
                 if value is None:
-                    return "Invalid input: Label cannot be empty"
+                    return "Invalid: Label must not be empty"
 
                 if not isinstance(value, str) or not value.isalpha():
-                    return "Invalid input: Label should be alphabetics"
+                    return "Invalid: Only accepts alphabetics without spaces in between"
 
             return func(self, *args, **kwargs)
         return wrapper
