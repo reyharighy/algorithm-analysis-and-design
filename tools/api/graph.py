@@ -87,6 +87,8 @@ class Graph:
         match task_number:
             case 1:
                 self.__create_graph_task_1()
+            case 2:
+                self.__create_graph_task_2()
             case 3:
                 self.__create_graph_task_3()
             case _:
@@ -113,6 +115,30 @@ class Graph:
         for source, dest in edge_dictionary.items():
             for d in dest:
                 self.__add_edge(source, d)
+
+    def __create_graph_task_2(self):
+        """Creates a graph for task 2 with weighted edges."""
+        for label in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
+            self.__add_vertex(label)
+
+        edge_dictionary = {
+            'A': [('C', 4), ('E', 14)],
+            'B': [('I', 3), ('J', 7)],
+            'C': [('D', 4), ('K', 20)],
+            'D': [('E', 7), ('F', 9)],
+            'E': [('G', 12)],
+            'F': [('G', 8), ('K', 11)],
+            'G': [('H', 11)],
+            'H': [('I', 4), ('J', 7), ('K', 15)],
+            'I': [('J', 5)],
+            'J': [('K', 7)],
+            'K': [],
+        }
+
+        for source, dest_list in edge_dictionary.items():
+            for d, w in dest_list:
+                self.__add_edge(source, d, w)
+                self.__add_edge(d, source, w)
 
     def __create_graph_task_3(self):
         """Creates a graph for task 3 with weighted edges for Dijkstra."""
