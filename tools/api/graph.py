@@ -1,7 +1,11 @@
 """This module defines a Graph class that represents a graph using vertices and edges."""
 
+from typing import TYPE_CHECKING
 from tools.api.object import Vertex, Edge
 from helper.validators import validate_labels
+
+if TYPE_CHECKING:
+    from tools.algorithms.breadth_first_search import BreadthFirstSearch
 
 class Graph:
     """A class representing a graph, which consists of vertices and edges."""
@@ -9,27 +13,36 @@ class Graph:
     def __init__(self):
         self.__vertices: list[Vertex] = []
 
-    def __repr__(self) -> str:
+    def graph_definition(self, algorithm: str) -> str:
         """Returns a string representation of the graph."""
-        if not self.__vertices:
-            return 'Graph is empty.'
+        vertices = '\n\tGraph Definition:\n'
 
-        s = ''
+        if not self.__vertices:
+            vertices += '\t  Graph is empty'
 
         for vertex in self.__vertices:
-            s += f'- Vertex({vertex.get_label()}): {vertex.get_edges()}'
+            vertices += f"\t  - Vertex({{label: {vertex.get_label()}"
+            vertices += f", color: {vertex.get_color()}"
+            vertices += f", predecessor: {vertex.get_predecessor()}"
+            vertices += f", edges: {vertex.get_edges()}"
+
+            match algorithm:
+                case 'bfs':
+                    vertices += f", distance: {vertex.get_distance()}"
+
+            vertices += "})"
 
             if vertex.get_label() != self.__vertices[-1].get_label():
-                s += '\n'
+                vertices += '\n'
 
-        return s
+        return vertices + '\n'
 
     def _get_vertices(self) -> list[Vertex]:
         """Returns the list of vertices in the graph."""
         return self.__vertices
 
     @validate_labels('label')
-    def _get_vertex(self, label: str) -> 'Vertex | None':
+    def get_vertex(self, label: str) -> 'Vertex | None':
         """Retrieves a vertex by its label."""
         for vertex in self.__vertices:
             if vertex.get_label() == label:
@@ -38,17 +51,20 @@ class Graph:
         return None
 
     @validate_labels('label')
-    def __add_vertex(self, label: str):
+    def add_vertex(self, label: str) -> bool:
         """Adds a vertex with the given label to the graph."""
-        if self._get_vertex(label) is None:
+        if self.get_vertex(label) is None:
             vertex = Vertex(label)
             self.__vertices.append(vertex)
+            return True
+
+        return False
 
     @validate_labels('source_label', 'dest_label')
     def __add_edge(self, source_label: str, dest_label: str, weight: int | tuple[int, int] = 1):
         """Adds an edge between two vertices in the graph."""
-        source_vertex = self._get_vertex(source_label)
-        dest_vertex = self._get_vertex(dest_label)
+        source_vertex = self.get_vertex(source_label)
+        dest_vertex = self.get_vertex(dest_label)
 
         if not source_vertex or not dest_vertex:
             raise ValueError(f"'{source_label}' or '{dest_label}' do not exist.")
@@ -97,7 +113,7 @@ class Graph:
     def __create_graph_task_1(self):
         """Creates a graph for task 1."""
         for i in range(65, 75):
-            self.__add_vertex(chr(i))
+            self.add_vertex(chr(i))
 
         edge_dictionary = {
             'A': ['B', 'D', 'E'],
@@ -119,7 +135,7 @@ class Graph:
     def __create_graph_task_2(self):
         """Creates a graph for task 2 with weighted edges."""
         for label in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
-            self.__add_vertex(label)
+            self.add_vertex(label)
 
         edge_dictionary = {
             'A': [('C', 4), ('E', 14)],
@@ -143,7 +159,7 @@ class Graph:
     def __create_graph_task_3(self):
         """Creates a graph for task 3 with weighted edges for Dijkstra."""
         for label in ['S', 'U', 'X', 'V', 'Y']:
-            self.__add_vertex(label)
+            self.add_vertex(label)
 
         edge_dictionary = {
             'S': [('U', 10), ('X', 5)],

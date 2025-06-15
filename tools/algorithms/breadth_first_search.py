@@ -12,14 +12,10 @@ class BreadthFirstSearch(Graph):
         super().__init__()
         self.__queue: deque['Vertex'] = deque()
 
-    def __repr__(self) -> str:
-        """Returns a string representation of the graph."""
-        return "BreadthFirstSearch:\n" + super().__repr__()
-
     @validate_labels('start_label')
     def run(self, start_label: str):
         """Performs breadth-first search starting from the given vertex label."""
-        start_vertex = self._get_vertex(start_label)
+        start_vertex = self.get_vertex(start_label)
 
         if start_vertex is None:
             raise ValueError(f"Vertex with label '{start_label}' does not exist.")
@@ -42,7 +38,6 @@ class BreadthFirstSearch(Graph):
 
             head.update_default_attributes(color='blue')
 
-    # omit for later use
-    def get_vertices(self) -> list[Vertex]:
+    def get_vertices(self):
         """Returns the list of vertices in the graph."""
         return self._get_vertices()

@@ -11,10 +11,10 @@ def validate_labels(*label_args):
                 value: str | None = arg_map.get(label)
 
                 if value is None:
-                    raise ValueError(f"Label cannot be empty for argument '{label}'")
+                    return "Invalid input: Label cannot be empty"
 
                 if not isinstance(value, str) or not value.isalpha():
-                    raise ValueError(f"Invalid label: '{value}' for argument '{label}'")
+                    return "Invalid input: Label should be alphabetics"
 
             return func(self, *args, **kwargs)
         return wrapper

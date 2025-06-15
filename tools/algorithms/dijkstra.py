@@ -58,13 +58,3 @@ class DijkstraSearch(Graph):
         self.__queue.remove(min_vertex)
 
         return min_vertex
-
-    # omit for later use
-    def get_vertices(self) -> list[Vertex]:
-        """Returns the list of vertices in the graph."""
-        return self._get_vertices()
-
-    # omit for later use
-    def get_single_source(self) -> list[Vertex]:
-        """Returns the list of single source path"""
-        return self.__single_source
