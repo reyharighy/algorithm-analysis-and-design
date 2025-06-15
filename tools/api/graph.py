@@ -115,7 +115,7 @@ class Graph:
         for source, dest in edge_dictionary.items():
             for d in dest:
                 self.__add_edge(source, d)
-    
+
     def __create_graph_task_2(self):
         """Creates a graph for task 2 with weighted edges."""
         for label in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
