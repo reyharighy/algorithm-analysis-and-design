@@ -14,10 +14,18 @@ BFS_MENU = """
 \tPlease input an option number below:
 \t  1. Create new vertex
 \t  2. Create new edge
-\t  3. Update a vertex
-\t  4. Update an edge
-\t  5. Create a dedicated graph
-\t  6. Back to main menu
+\t  3. Create reserved graph
+\t  4. Run BFS on graph
+\t  5. Back to main menu
+"""
+
+DFS_MENU = """
+\tPlease input an option number below:
+\t  1. Create new vertex
+\t  2. Create new edge
+\t  3. Create reserved graph
+\t  4. Run DFS on graph
+\t  5. Back to main menu
 """
 
 content_dictionary = {
@@ -29,6 +37,11 @@ content_dictionary = {
     'bfs': {
         'title': " BREADTH-FIRST SEARCH ",
         'body': BFS_MENU
+    },
+
+    'dfs': {
+        'title': " DEPTH-FIRST SEARCH ",
+        'body': DFS_MENU
     }
 }
 

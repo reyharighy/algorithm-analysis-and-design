@@ -3,7 +3,6 @@
 from collections import deque
 from tools.api.graph import Graph
 from tools.api.object import Vertex
-from helper.validators import validate_labels
 
 class BreadthFirstSearch(Graph):
     """A class to perform breadth-first search on a graph."""
@@ -12,31 +11,28 @@ class BreadthFirstSearch(Graph):
         super().__init__()
         self.__queue: deque['Vertex'] = deque()
 
-    @validate_labels('start_label')
-    def run(self, start_label: str):
+    def run(self, start: Vertex):
         """Performs breadth-first search starting from the given vertex label."""
-        start_vertex = self.get_vertex(start_label)
-
-        if start_vertex is None:
-            raise ValueError(f"Vertex with label '{start_label}' does not exist.")
-
         self._reset('bfs')
 
-        start_vertex.update_default_attributes(color='red')
-        start_vertex.update_bfs_attributes(distance=0)
+        start.update_bfs_attributes(color="red", distance=0)
 
-        self.__queue.append(start_vertex)
+        self.__queue.append(start)
 
         while self.__queue:
             head = self.__queue.popleft()
 
-            for neighbor in head.get_neighbors():
-                if neighbor.get_color() == 'white':
-                    neighbor.update_default_attributes(color='red', predecessor=head)
-                    neighbor.update_bfs_attributes(distance=head.get_distance() + 1)
-                    self.__queue.append(neighbor)
+            for edge in head.get_edges():
+                if edge.get_destination().get_color() == 'white':
+                    edge.get_destination().update_bfs_attributes(
+                        color='red',
+                        predecessor=head,
+                        distance=head.get_distance() + 1
+                    )
 
-            head.update_default_attributes(color='blue')
+                    self.__queue.append(edge.get_destination())
+
+            head.update_bfs_attributes(color='blue')
 
     def get_vertices(self):
         """Returns the list of vertices in the graph."""

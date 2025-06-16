@@ -10,23 +10,20 @@ class Graph:
         self.__vertices: list[Vertex] = []
 
     def definition(self, algorithm: str) -> str:
-        """Returns a string representation of the graph."""
+        """Returns the definition of the graph."""
         vertices = '\n\tGraph Definition:\n'
 
         if not self.__vertices:
             vertices += '\t  Graph is empty'
 
         for vertex in self.__vertices:
-            vertices += f"\t  - Vertex({{label: {vertex.get_label()}"
-            vertices += f", color: {vertex.get_color()}"
-            vertices += f", predecessor: {vertex.get_predecessor()}"
-            vertices += f", edges: {vertex.get_edges()}"
+            vertices += "\t  - "
 
             match algorithm:
                 case 'bfs':
-                    vertices += f", distance: {vertex.get_distance()}"
-
-            vertices += "})"
+                    vertices += vertex.definition('bfs')
+                case 'dfs':
+                    vertices += vertex.definition('dfs')
 
             if vertex.get_label() != self.__vertices[-1].get_label():
                 vertices += '\n'
@@ -74,11 +71,13 @@ class Graph:
     def _reset(self, algorithm: str):
         """Resets the graph's vertices to their initial state."""
         for vertex in self.__vertices:
-            vertex.update_default_attributes(color='white', predecessor=None)
-
             match algorithm:
                 case 'bfs':
-                    vertex.update_bfs_attributes(distance=float('inf'))
+                    vertex.update_bfs_attributes(
+                        color="white",
+                        predecessor=None,
+                        distance=float('inf')
+                    )
                 case 'dfs':
                     vertex.update_dfs_attributes(discovery_time=0, finish_time=0)
                 case 'dijkstra':

@@ -2,6 +2,7 @@
 
 from interface.base_program import BaseProgram
 from interface.bfs_program import BFSProgram
+from interface.dfs_program import DFSProgram
 from interface.contents import content_dictionary
 
 class MainProgram(BaseProgram):
@@ -12,7 +13,7 @@ class MainProgram(BaseProgram):
         self.__running_program = None
 
     def __execute_subprogram(self):
-        """Executes a process dedending on the user input."""
+        """Executes a process depending on the user input."""
         option_input = self._option_entry_handler()
 
         match option_input:
@@ -23,7 +24,11 @@ class MainProgram(BaseProgram):
                 self.deactivate_running_program()
                 return
             case 2:
-                pass
+                self.__running_program = DFSProgram()
+                self.__running_program.start()
+                self.__running_program.save_exit()
+                self.deactivate_running_program()
+                return
             case 3:
                 pass
             case 4:
@@ -56,9 +61,9 @@ class MainProgram(BaseProgram):
         self._close_program()
 
     def save_exit(self):
-        """Save configuration made after exiting the program."""
+        """Saves configuration made after exiting the program."""
 
     def deactivate_running_program(self):
-        """Kill the process of running program."""
+        """Kills the process of running program."""
         self._append_success_message(f"Deactivate subprogram: {self.__running_program}")
         self.__running_program = None

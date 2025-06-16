@@ -5,18 +5,16 @@ from typing import TypedDict, TYPE_CHECKING
 if TYPE_CHECKING:
     from tools.api.object import Vertex
 
-class DefaultVertexType(TypedDict, total=False):
-    """A TypedDict for default vertex attributes."""
-    label: str
-    color: str
-    predecessor: 'Vertex | None'
-
 class BFSVertexType(TypedDict, total=False):
     """A TypedDict for BFS vertex attributes."""
+    color: str
+    predecessor: 'Vertex | None'
     distance: int | float
 
 class DFSVertexType(TypedDict, total=False):
     """A TypedDict for DFS vertex attributes."""
+    color: str
+    predecessor: 'Vertex | None'
     discovery_time: int | float
     finish_time: int | float
 

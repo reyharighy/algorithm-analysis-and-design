@@ -33,7 +33,7 @@ class BaseProgram:
         """Not implemented."""
 
     def _close_program(self):
-        """Kill the main program."""
+        """Kills the main program."""
         self._flush_session_message()
         self._loading()
         self._clear_screen()
@@ -117,7 +117,7 @@ class BaseProgram:
             i = (i + 1) % len(symbols)
             stdout.write(f'\r\033[K{symbols[i]} ')
             stdout.flush()
-            time.sleep(0.1)
+            time.sleep(.05)
 
     def _loading(self):
         """Buffers the process to simulate the loading animation."""
