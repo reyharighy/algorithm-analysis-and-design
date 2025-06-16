@@ -20,12 +20,6 @@ BFS_MENU = """
 \t  6. Back to main menu
 """
 
-TWO_DIRECTION_EDGE = """
-\tPlease input an option number below:
-\t  1. One-direction Edge
-\t  2. Two-direction Edge
-"""
-
 content_dictionary = {
     'main_menu': {
         'title': " MAIN MENU ",
@@ -36,4 +30,14 @@ content_dictionary = {
         'title': " BREADTH-FIRST SEARCH ",
         'body': BFS_MENU
     }
+}
+
+TWO_DIRECTION_EDGE = """
+\tPlease input an option number below:
+\t  1. One-direction Edge
+\t  2. Two-direction Edge
+"""
+
+subcontent_dictionary = {
+    'two_direction_edge' : TWO_DIRECTION_EDGE
 }

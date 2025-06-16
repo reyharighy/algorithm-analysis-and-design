@@ -11,47 +11,49 @@ class MainProgram(BaseProgram):
         super().__init__()
         self.__running_program = None
 
+    def __execute_subprogram(self):
+        """Executes a process dedending on the user input."""
+        option_input = self._option_entry_handler()
+
+        match option_input:
+            case 1:
+                self.__running_program = BFSProgram()
+                self.__running_program.start()
+                self.__running_program.save_exit()
+                self.deactivate_running_program()
+                return
+            case 2:
+                pass
+            case 3:
+                pass
+            case 4:
+                pass
+            case 5:
+                pass
+            case 6:
+                self._sub.resume = False
+                self._append_success_message("\nExited")
+                return
+            case None:
+                self._sub.message = "Invalid: Input must not be empty"
+            case -1:
+                self._sub.message = "Invalid: Only accepts numerics without spaces in between"
+            case _:
+                self._sub.message = f"Invalid: No option number {option_input}"
+
+        self._append_error_message(self._sub.message)
+
     def start(self):
         """A section to start the main program."""
-        while True:
-            self._clear_screen()
+        content = content_dictionary['main_menu']
+        title = content['title']
+        body = content['body']
 
-            content = content_dictionary['main_menu']
-            self._display_content(content['title'], content['body'])
+        while self._sub.resume:
+            self._refresh_display(title, body)
+            self.__execute_subprogram()
 
-            self._flush_session_message()
-            option_input = self._option_entry_handler()
-            self._loading()
-
-            self._clear_screen()
-
-            error_message = ''
-
-            match option_input:
-                case 1:
-                    self.__running_program = BFSProgram()
-                    self.__running_program.start()
-                    self.__running_program.save_exit()
-                    self.deactivate_running_program()
-                    continue
-                case 2:
-                    pass
-                case 3:
-                    pass
-                case 4:
-                    pass
-                case 5:
-                    pass
-                case 6:
-                    break
-                case None:
-                    error_message = "Invalid: Input must not be empty"
-                case -1:
-                    error_message = "Invalid: Only accepts numerics without spaces in between"
-                case _:
-                    error_message = f"Invalid: No option number {option_input}"
-
-            self._append_error_message(error_message)
+        self._close_program()
 
     def save_exit(self):
         """Save configuration made after exiting the program."""
