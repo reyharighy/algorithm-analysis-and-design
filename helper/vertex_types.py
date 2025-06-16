@@ -20,6 +20,7 @@ class DFSVertexType(TypedDict, total=False):
 
 class DijkstraVertexType(TypedDict, total=False):
     """A TypedDict for Dijkstra vertex attributes."""
+    predecessor: 'Vertex | None'
     distance: int | float
 
 class PrimVertexType(TypedDict, total=False):

@@ -44,6 +44,9 @@ class Vertex:
                 vertex += f", predecessor: {self.get_predecessor()}"
                 vertex += f", discovery: {self.get_discovery_time()}"
                 vertex += f", finish: {self.get_finish_time()}"
+            case 'dijkstra':
+                vertex += f", predecessor: {self.get_predecessor()}"
+                vertex += f", distance: {self.get_distance()}"
 
         edge_list = '['
 
@@ -133,6 +136,7 @@ class Vertex:
     def update_dijkstra_attributes(self, **kwargs: Unpack[DijkstraVertexType]):
         """
         Updates Dijkstra-specific attributes of the vertex.
+        - Predecessor
         - Distance
         """
         self.__update(self.__special_attributes, **kwargs)
@@ -175,6 +179,8 @@ class Edge:
         match algorithm:
             case 'dfs':
                 s += f", {self.get_classification()}"
+            case 'dijkstra':
+                s += f", {self.get_weight()}"
 
         s += ')'
 

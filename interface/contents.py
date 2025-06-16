@@ -2,8 +2,8 @@
 
 MAIN_MENU = """
 \tPlease input an option number below:
-\t  1. Breadth-First Search
-\t  2. Depth-First Search
+\t  1. BFS
+\t  2. DFS
 \t  3. Kruskal
 \t  4. Prim
 \t  5. Dijkstra
@@ -28,6 +28,15 @@ DFS_MENU = """
 \t  5. Back to main menu
 """
 
+DIJKSTRA_MENU = """
+\tPlease input an option number below:
+\t  1. Create new vertex
+\t  2. Create new edge
+\t  3. Create reserved graph
+\t  4. Run DFS on graph
+\t  5. Back to main menu
+"""
+
 content_dictionary = {
     'main_menu': {
         'title': " MAIN MENU ",
@@ -41,6 +50,11 @@ content_dictionary = {
 
     'dfs': {
         'title': " DEPTH-FIRST SEARCH ",
+        'body': DFS_MENU
+    },
+
+    'dijkstra': {
+        'title': " DIJKSTRA SEARCH",
         'body': DFS_MENU
     }
 }

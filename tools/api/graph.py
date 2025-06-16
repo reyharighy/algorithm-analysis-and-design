@@ -24,6 +24,8 @@ class Graph:
                     vertices += vertex.definition('bfs')
                 case 'dfs':
                     vertices += vertex.definition('dfs')
+                case 'dijkstra':
+                    vertices += vertex.definition('dijkstra')
 
             if vertex.get_label() != self.__vertices[-1].get_label():
                 vertices += '\n'

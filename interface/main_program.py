@@ -3,6 +3,7 @@
 from interface.base_program import BaseProgram
 from interface.bfs_program import BFSProgram
 from interface.dfs_program import DFSProgram
+from interface.dijkstra_program import DijkstraProgram
 from interface.contents import content_dictionary
 
 class MainProgram(BaseProgram):
@@ -19,22 +20,20 @@ class MainProgram(BaseProgram):
         match option_input:
             case 1:
                 self.__running_program = BFSProgram()
-                self.__running_program.start()
-                self.__running_program.save_exit()
-                self.deactivate_running_program()
+                self.__cycle()
                 return
             case 2:
                 self.__running_program = DFSProgram()
-                self.__running_program.start()
-                self.__running_program.save_exit()
-                self.deactivate_running_program()
+                self.__cycle()
                 return
             case 3:
                 pass
             case 4:
                 pass
             case 5:
-                pass
+                self.__running_program = DijkstraProgram()
+                self.__cycle()
+                return
             case 6:
                 self._sub.resume = False
                 self._append_success_message("\nExited")
@@ -67,3 +66,11 @@ class MainProgram(BaseProgram):
         """Kills the process of running program."""
         self._append_success_message(f"Deactivate subprogram: {self.__running_program}")
         self.__running_program = None
+
+    def __cycle(self):
+        """Runs the subprogram in a cycle."""
+        if self.__running_program:
+            self.__running_program.start()
+            self.__running_program.save_exit()
+
+        self.deactivate_running_program()

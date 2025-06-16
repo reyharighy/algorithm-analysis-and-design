@@ -3,7 +3,6 @@
 from collections import deque
 from tools.api.graph import Graph
 from tools.api.object import Vertex
-from helper.validators import validate_labels
 
 class DijkstraSearch(Graph):
     """A class to perform Dijkstra search on a graph"""
@@ -16,17 +15,11 @@ class DijkstraSearch(Graph):
     def __repr__(self) -> str:
         return "DijkstraSearch:\n" + super().__repr__()
 
-    @validate_labels('start_label')
-    def run(self, start_label: str):
+    def run(self, start: Vertex):
         """Performs Dijkstra search starting from the given vertex label."""
-        start_vertex = self.get_vertex(start_label)
-
-        if start_vertex is None:
-            raise ValueError(f"Vertex with label '{start_label}' does not exist.")
-
         self._reset('dijkstra')
 
-        start_vertex.update_dijkstra_attributes(distance=0)
+        start.update_dijkstra_attributes(distance=0)
 
         for vertex in self._get_vertices():
             self.__queue.append(vertex)
@@ -40,8 +33,10 @@ class DijkstraSearch(Graph):
                 weight = edge.get_weight()
 
                 if destination.get_distance() >= source.get_distance() + weight:
-                    destination.update_default_attributes(predecessor=source)
-                    destination.update_dijkstra_attributes(distance=source.get_distance() + weight)
+                    destination.update_dijkstra_attributes(
+                        predecessor=source,
+                        distance=source.get_distance() + weight
+                    )
 
             self.__single_source.append(current_vertex)
 
@@ -58,3 +53,7 @@ class DijkstraSearch(Graph):
         self.__queue.remove(min_vertex)
 
         return min_vertex
+
+    def get_vertices(self):
+        """Returns the list of vertices in the graph."""
+        return self._get_vertices()
