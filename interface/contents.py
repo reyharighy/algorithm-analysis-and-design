@@ -28,6 +28,15 @@ DFS_MENU = """
 \t  5. Back to main menu
 """
 
+KRUSKAL_MENU = """
+\tPlease input an option number below:
+\t  1. Create new vertex
+\t  2. Create new edge
+\t  3. Create reserved graph
+\t  4. Run DFS on graph
+\t  5. Back to main menu
+"""
+
 DIJKSTRA_MENU = """
 \tPlease input an option number below:
 \t  1. Create new vertex
@@ -51,6 +60,11 @@ content_dictionary = {
     'dfs': {
         'title': " DEPTH-FIRST SEARCH ",
         'body': DFS_MENU
+    },
+
+    'kruskal': {
+        'title': " KRUSKAL SEARCH ",
+        'body': KRUSKAL_MENU
     },
 
     'dijkstra': {

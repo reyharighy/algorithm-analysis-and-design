@@ -81,9 +81,17 @@ class Graph:
                         distance=float('inf')
                     )
                 case 'dfs':
-                    vertex.update_dfs_attributes(discovery_time=0, finish_time=0)
+                    vertex.update_dfs_attributes(
+                        color="white",
+                        predecessor=None,
+                        discovery_time=0,
+                        finish_time=0
+                    )
                 case 'dijkstra':
-                    vertex.update_dijkstra_attributes(distance=float('inf'))
+                    vertex.update_dijkstra_attributes(
+                        predecessor=None,
+                        distance=float('inf')
+                    )
                 case _:
                     raise ValueError(f'{algorithm} is incorrect value for parameter include')
 
@@ -127,24 +135,22 @@ class Graph:
                 if source and destination:
                     self.add_edge(source, destination)
 
-    # need to check the implementation of this graph definition
     def __create_graph_task_2(self):
         """Creates a graph for task 2 with weighted edges."""
-        for label in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
-            self.add_vertex(label)
+        for i in range(65, 76):
+            self.add_vertex(chr(i))
 
         edge_dictionary = {
-            'A': [('C', 4), ('E', 14)],
-            'B': [('I', 3), ('J', 7)],
-            'C': [('D', 4), ('K', 20)],
-            'D': [('E', 7), ('F', 9)],
-            'E': [('G', 12)],
-            'F': [('G', 8), ('K', 11)],
-            'G': [('H', 11)],
-            'H': [('I', 4), ('J', 7), ('K', 15)],
-            'I': [('J', 5)],
-            'J': [('K', 7)],
-            'K': [],
+            'A': [('C', 4), ('B', 14)],
+            'B': [('D', 7), ('E', 12)],
+            'C': [('D', 4), ('G', 20)],
+            'D': [('F', 9)],
+            'E': [('F', 8), ('H', 11)],
+            'F': [('G', 11)],
+            'G': [('H', 15), ('I', 7)],
+            'H': [('I', 7), ('J', 4)],
+            'I': [('J', 5), ('K', 7)],
+            'J': [('K', 3)]
         }
 
         for source_label, destination_labels in edge_dictionary.items():
@@ -152,8 +158,7 @@ class Graph:
 
             for label, weight in destination_labels:
                 destination = Vertex(label)
-                self.add_edge(source, destination, weight)
-                self.add_edge(destination=destination, source=source, weight=weight)
+                self.add_edge(source, destination, (weight, weight))
 
     def __create_graph_task_3(self):
         """Creates a graph for task 3 with weighted edges for Dijkstra."""

@@ -23,11 +23,11 @@ class BFSProgram(BaseProgram):
         match option_input:
             case 1:
                 self.__create_vertex()
-                self._reset_contexts()
+                self._reset_external_contexts()
                 return
             case 2:
                 self.__create_edge()
-                self._reset_contexts()
+                self._reset_external_contexts()
                 return
             case 3:
                 self.__bfs.create_graph_from_problem_statement(1)
@@ -35,19 +35,19 @@ class BFSProgram(BaseProgram):
                 return
             case 4:
                 self.__run()
-                self._reset_contexts()
+                self._reset_external_contexts()
                 return
             case 5:
-                self._sub.resume = False
+                self._extrn.resume = False
                 return
             case None:
-                self._sub.message = "Invalid: Input must not be empty"
+                self._base.message = "Invalid: Input must not be empty"
             case -1:
-                self._sub.message = "Invalid: Only accept numeric type"
+                self._base.message = "Invalid: Only accept numeric type"
             case _:
-                self._sub.message = f"Invalid: No option number {option_input}"
+                self._base.message = f"Invalid: No option number {option_input}"
 
-        self._append_error_message(self._sub.message)
+        self._append_error_message(self._base.message)
 
     def start(self):
         """A section to start the BFS program."""
@@ -55,7 +55,7 @@ class BFSProgram(BaseProgram):
         title: str = content['title']
         body: str = content['body']
 
-        while self._sub.resume:
+        while self._extrn.resume:
             self._refresh_display(title, self.__bfs.definition('bfs') + body)
             self.__execute_process()
 
@@ -74,7 +74,7 @@ class BFSProgram(BaseProgram):
             else:
                 self._append_error_message(f"Invalid: Vertex({label}) already exists")
 
-            self._sub.resume = False
+            self._extrn.resume = False
 
     def __vertex_creation_process(self):
         """Executes a process of creating a vertex."""
@@ -86,7 +86,7 @@ class BFSProgram(BaseProgram):
         """Simulates a process of adding a new vertex."""
         title: str = " CREATE A NEW VERTEX "
 
-        while self._sub.resume:
+        while self._extrn.resume:
             self._refresh_display(title, self.__bfs.definition('bfs'))
             self.__vertex_creation_process()
 
@@ -155,9 +155,9 @@ class BFSProgram(BaseProgram):
         for edge in source.get_edges():
             if edge.get_destination() is destination:
                 src_label, dest_label = source.get_label(), destination.get_label()
-                self._sub.message = f"Invalid: Edge({src_label}, {dest_label}) already exists"
-                self._append_error_message(self._sub.message)
-                self._sub.resume = False
+                self._base.message = f"Invalid: Edge({src_label}, {dest_label}) already exists"
+                self._append_error_message(self._base.message)
+                self._extrn.resume = False
                 return True
 
         return False
@@ -178,8 +178,8 @@ class BFSProgram(BaseProgram):
         """Executes a process of creating an edge upon successful validation."""
         if self.__edge_complement_exists(source, destination):
             self.__bfs.add_edge(source, destination)
-            self._sub.resume = False
-            self.__edge_creation_session(source, destination, self._sub.two_direction)
+            self._extrn.resume = False
+            self.__edge_creation_session(source, destination, self._edg.two_direction)
             return
 
         option_input = self._option_entry_handler()
@@ -187,23 +187,23 @@ class BFSProgram(BaseProgram):
         match option_input:
             case 1:
                 self.__bfs.add_edge(source, destination)
-                self._sub.resume = False
-                self.__edge_creation_session(source, destination, self._sub.two_direction)
+                self._extrn.resume = False
+                self.__edge_creation_session(source, destination, self._edg.two_direction)
                 return
             case 2:
                 self.__bfs.add_edge(source, destination, (1, 1))
-                self._sub.two_direction = True
-                self._sub.resume = False
-                self.__edge_creation_session(source, destination, self._sub.two_direction)
+                self._edg.two_direction = True
+                self._extrn.resume = False
+                self.__edge_creation_session(source, destination, self._edg.two_direction)
                 return
             case None:
-                self._sub.message = "Invalid: Input must not be empty"
+                self._base.message = "Invalid: Input must not be empty"
             case -1:
-                self._sub.message = "Invalid: Only accept numeric type"
+                self._base.message = "Invalid: Only accept numeric type"
             case _:
-                self._sub.message = f"Invalid: No option number {option_input}"
+                self._base.message = f"Invalid: No option number {option_input}"
 
-        self._append_error_message(self._sub.message)
+        self._append_error_message(self._base.message)
 
     def __create_edge(self):
         """Simulates a process of adding a new edge."""
@@ -215,8 +215,8 @@ class BFSProgram(BaseProgram):
         source: Vertex | None = None
         destination: Vertex | None = None
 
-        while self._sub.resume:
-            body = self.__edge_creation_content(source, destination, self._sub.valid)
+        while self._extrn.resume:
+            body = self.__edge_creation_content(source, destination, self._extrn.valid)
             self._refresh_display(title, body)
 
             if source is None:
@@ -225,10 +225,10 @@ class BFSProgram(BaseProgram):
             elif destination is None:
                 destination = self.__vertex_retrieval_session("destination")
 
-            elif source and destination and not self._sub.valid:
-                self._sub.valid = not self.__edge_exists(source, destination)
+            elif source and destination and not self._extrn.valid:
+                self._extrn.valid = not self.__edge_exists(source, destination)
 
-            elif self._sub.valid:
+            elif self._extrn.valid:
                 self.__edge_creation_process(source, destination)
 
     def __check_edges(self) -> bool:
@@ -248,7 +248,7 @@ class BFSProgram(BaseProgram):
         title: str = " RUN BREADTH-FIRST SEARCH "
         start: Vertex | None = None
 
-        while self._sub.resume:
+        while self._extrn.resume:
             self._refresh_display(title, self.__bfs.definition("bfs"))
 
             if start is None:
@@ -256,4 +256,4 @@ class BFSProgram(BaseProgram):
 
             elif isinstance(start, Vertex):
                 self.__bfs.run(start)
-                self._sub.resume = False
+                self._extrn.resume = False

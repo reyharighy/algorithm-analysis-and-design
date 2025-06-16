@@ -4,18 +4,31 @@ import os
 import time
 import threading
 from sys import stdout
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from rich import print as session
 
 @dataclass
-class Process:
-    """A class to provide general status dedicated tp subprogram when a process is running."""
+class Base:
+    """A class to provide general status dedicated to internal running process."""
     message: str = ''
     animated: bool = False
     success = True
+
+@dataclass
+class External:
+    """A class to provide general status dedicated to external running process."""
     resume: bool = True
     valid: bool = False
+
+@dataclass
+class EdgeProcess:
+    """A class to provide context dedicated to a process of defining the edge's weight."""
     two_direction: bool = False
+    weight: bool = False
+    int_weight: bool = False
+    first_weight: bool = False
+    second_weight: bool = False
+    weight_list: list[int] = field(default_factory=list)
 
 class BaseProgram:
     """A class to provide basic operation when using a program."""
@@ -24,7 +37,9 @@ class BaseProgram:
         self._terminal_height: int = int(os.popen('stty size', 'r').read().split()[0])
         self._terminal_width: int = int(os.popen('stty size', 'r').read().split()[1])
 
-        self._sub: Process = Process()
+        self._base: Base = Base()
+        self._extrn: External = External()
+        self._edg: EdgeProcess = EdgeProcess()
 
     def start(self):
         """Not implemented."""
@@ -71,13 +86,13 @@ class BaseProgram:
 
     def _flush_session_message(self):
         """Flushes the message when present."""
-        if self._sub.success:
-            session(f"[bold green]{self._sub.message}[/bold green]")
+        if self._base.success:
+            session(f"[bold green]{self._base.message}[/bold green]")
         else:
-            session(f"[bold red]{self._sub.message}[/bold red]")
+            session(f"[bold red]{self._base.message}[/bold red]")
 
-        self._sub.message = ''
-        self._sub.success = True
+        self._base.message = ''
+        self._base.success = True
 
     def _refresh_display(self, title: str, body: str):
         """Refreshes display upon a cycle of a process."""
@@ -87,13 +102,13 @@ class BaseProgram:
 
     def _append_error_message(self, message: str):
         """Adds an error message to the session."""
-        self._sub.message = message
-        self._sub.success = False
+        self._base.message = message
+        self._base.success = False
 
     def _append_success_message(self, message: str):
         """Adds a success message to the session."""
-        self._sub.message = message
-        self._sub.success = True
+        self._base.message = message
+        self._base.success = True
 
     def _option_entry_handler(self) -> int | None:
         """Handles the option number input by the user."""
@@ -113,7 +128,7 @@ class BaseProgram:
         symbols = ['⣾', '⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽']
         i = 0
 
-        while self._sub.animated:
+        while self._base.animated:
             i = (i + 1) % len(symbols)
             stdout.write(f'\r\033[K{symbols[i]} ')
             stdout.flush()
@@ -121,17 +136,26 @@ class BaseProgram:
 
     def _loading(self):
         """Buffers the process to simulate the loading animation."""
-        self._sub.animated = True
+        self._base.animated = True
 
         loading_thread = threading.Thread(target=self.__spinner)
         loading_thread.daemon = True
         loading_thread.start()
         time.sleep(.5)
 
-        self._sub.animated = False
+        self._base.animated = False
 
-    def _reset_contexts(self):
-        """Resets contexts to default after a process of subprogram is done."""
-        self._sub.resume = True
-        self._sub.valid = False
-        self._sub.two_direction = False
+    def _reset_external_contexts(self):
+        """Resets external contexts to default after a process of subprogram is done."""
+        self._extrn.resume = True
+        self._extrn.valid = False
+        self._reset_edge_contexts()
+
+    def _reset_edge_contexts(self):
+        """Resets edge contexts to default after a process of defining weight."""
+        self._edg.two_direction = False
+        self._edg.weight = False
+        self._edg.int_weight = False
+        self._edg.first_weight = False
+        self._edg.second_weight = False
+        self._edg.weight_list = []

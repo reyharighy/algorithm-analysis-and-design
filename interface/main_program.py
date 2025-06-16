@@ -4,6 +4,7 @@ from interface.base_program import BaseProgram
 from interface.bfs_program import BFSProgram
 from interface.dfs_program import DFSProgram
 from interface.dijkstra_program import DijkstraProgram
+from interface.kruskal_program import KruskalProgram
 from interface.contents import content_dictionary
 
 class MainProgram(BaseProgram):
@@ -27,7 +28,8 @@ class MainProgram(BaseProgram):
                 self.__cycle()
                 return
             case 3:
-                pass
+                self.__running_program = KruskalProgram()
+                self.__cycle()
             case 4:
                 pass
             case 5:
@@ -35,17 +37,17 @@ class MainProgram(BaseProgram):
                 self.__cycle()
                 return
             case 6:
-                self._sub.resume = False
+                self._extrn.resume = False
                 self._append_success_message("\nExited")
                 return
             case None:
-                self._sub.message = "Invalid: Input must not be empty"
+                self._base.message = "Invalid: Input must not be empty"
             case -1:
-                self._sub.message = "Invalid: Only accepts numerics without spaces in between"
+                self._base.message = "Invalid: Only accepts numerics without spaces in between"
             case _:
-                self._sub.message = f"Invalid: No option number {option_input}"
+                self._base.message = f"Invalid: No option number {option_input}"
 
-        self._append_error_message(self._sub.message)
+        self._append_error_message(self._base.message)
 
     def start(self):
         """A section to start the main program."""
@@ -53,7 +55,7 @@ class MainProgram(BaseProgram):
         title = content['title']
         body = content['body']
 
-        while self._sub.resume:
+        while self._extrn.resume:
             self._refresh_display(title, body)
             self.__execute_subprogram()
 
