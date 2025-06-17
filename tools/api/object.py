@@ -189,6 +189,8 @@ class Edge:
                 s += f", {self.get_classification()}"
             case "kruskal":
                 s += f", {self.get_weight()}"
+            case "prim":
+                s += f", {self.get_weight()}"
             case 'dijkstra':
                 s += f", {self.get_weight()}"
 

@@ -77,7 +77,7 @@ content_dictionary = {
     },
 
     'prim': {
-        'title': " KRUSKAL SEARCH ",
+        'title': " PRIM SEARCH ",
         'body': PRIM_MENU
     },
 

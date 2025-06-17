@@ -23,7 +23,7 @@ class KruskalSearch(Graph):
         return None
 
     def run(self):
-        """Performs Dijkstra search starting from the given vertex label."""
+        """Performs Kruskal search on graph."""
         vertices: list[Vertex] = self.get_vertices()
         all_edges: list[Edge] = []
 

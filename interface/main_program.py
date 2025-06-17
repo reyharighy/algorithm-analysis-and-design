@@ -5,6 +5,7 @@ from interface.bfs_program import BFSProgram
 from interface.dfs_program import DFSProgram
 from interface.dijkstra_program import DijkstraProgram
 from interface.kruskal_program import KruskalProgram
+from interface.prim_program import PrimProgram
 from interface.contents import content_dictionary
 
 class MainProgram(BaseProgram):
@@ -32,7 +33,9 @@ class MainProgram(BaseProgram):
                 self.__cycle()
                 return
             case 4:
-                pass
+                self.__running_program = PrimProgram()
+                self.__cycle()
+                return
             case 5:
                 self.__running_program = DijkstraProgram()
                 self.__cycle()

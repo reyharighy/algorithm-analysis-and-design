@@ -1,39 +1,54 @@
 """Module implementing Prim's algorithm for finding the minimum spanning tree of a graph."""
+
 from tools.api.graph import Graph
-from tools.api.object import Edge
-import heapq
-import itertools
+from tools.api.object import Vertex, Edge
 
-def prim(graph: Graph, start_label: str = 'A') -> list[Edge]:
-    mst_edges: list[Edge] = []
-    visited: set[str] = set()
-    edge_candidates: list[tuple[int, int, Edge]] = []
-    counter = itertools.count()
+class PrimSearch(Graph):
+    """A class to perform Prim search on a graph"""
 
-    start_vertex = graph._get_vertex(start_label)
-    if not start_vertex:
-        raise ValueError(f"Start vertex '{start_label}' not found in graph")
+    def __init__(self):
+        super().__init__()
+        self.__trees: set[Edge] = set()
 
-    # Mark the starting vertex as visited and add its edges to the priority queue
-    visited.add(start_vertex.get_label())
-    for edge in start_vertex.get_edges():
-        heapq.heappush(edge_candidates, (edge.get_weight(), next(counter), edge))
+    def __repr__(self) -> str:
+        return "PrimSearch:\n" + super().__repr__()
 
-    # Loop until the priority queue is empty
-    while edge_candidates:
-        weight, _, edge = heapq.heappop(edge_candidates)
-        destination = edge.get_destination()
-        dest_label = destination.get_label()
+    def run(self, start: Vertex):
+        """Performs Prim search on graph."""
+        vertices: list[Vertex] = self.get_vertices()
+        visited: list[Vertex] = []
+        edges_to_visit: list[Edge] = []
 
-        if dest_label not in visited:
-            # Add the new vertex to the visited set
-            visited.add(dest_label)
-            # Add the edge to the MST
-            mst_edges.append(edge)
+        visited.append(start)
 
-            # Add all outgoing edges from the new vertex to the priority queue
-            for next_edge in destination.get_edges():
-                if next_edge.get_destination().get_label() not in visited:
-                    heapq.heappush(edge_candidates, (next_edge.get_weight(), next(counter), next_edge))
+        for edge in start.get_edges():
+            edges_to_visit.append(edge)
 
-    return mst_edges
+        while len(vertices) != len(visited):
+            edges_to_visit.sort(key=lambda edge: edge.get_weight())
+            min_edge = edges_to_visit.pop(0)
+
+            if min_edge.get_destination() in visited:
+                continue
+
+            self.__trees.add(min_edge)
+            source: Vertex = min_edge.get_source()
+            destination: Vertex = min_edge.get_destination()
+
+            if source not in visited:
+                visited.append(source)
+
+            if destination not in visited:
+                visited.append(destination)
+
+            for edge in visited[-1].get_edges():
+                if edge.get_destination() not in visited:
+                    edges_to_visit.append(edge)
+
+    def get_vertices(self) -> list[Vertex]:
+        """Returns the list of vertices in the graph."""
+        return self._get_vertices()
+
+    def get_trees(self) -> list[set[Edge]]:
+        """Returns the established MST in the graph."""
+        return [self.__trees]

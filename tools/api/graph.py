@@ -26,6 +26,8 @@ class Graph:
                     vertices += vertex.definition('dfs')
                 case 'kruskal':
                     vertices += vertex.definition('kruskal')
+                case 'prim':
+                    vertices += vertex.definition('prim')
                 case 'dijkstra':
                     vertices += vertex.definition('dijkstra')
 
