@@ -1,6 +1,6 @@
 """The entry point to run the program"""
 
-from interface.main_program import MainProgram
+from interface.core.main_program import MainProgram
 
 program = MainProgram()
 program.start()

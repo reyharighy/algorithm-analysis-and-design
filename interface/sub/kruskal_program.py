@@ -1,6 +1,6 @@
 """Module to simulate user interaction with Kruskal algorithm"""
 
-from interface.base_program import BaseProgram
+from interface.core.base_program import BaseProgram
 from interface.contents import content_dictionary
 from tools.algorithms.kruskal import KruskalSearch
 from tools.api.object import Vertex

@@ -1,6 +1,6 @@
 """Module to simulate user interaction with DFS algorithm"""
 
-from interface.base_program import BaseProgram
+from interface.core.base_program import BaseProgram
 from interface.contents import content_dictionary, subcontent_dictionary
 from tools.algorithms.depth_first_search import DepthFirstSearch
 from tools.api.object import Vertex

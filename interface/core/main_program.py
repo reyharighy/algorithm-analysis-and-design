@@ -1,11 +1,11 @@
 """Entry point for the user to use the program interactively."""
 
-from interface.base_program import BaseProgram
-from interface.bfs_program import BFSProgram
-from interface.dfs_program import DFSProgram
-from interface.dijkstra_program import DijkstraProgram
-from interface.kruskal_program import KruskalProgram
-from interface.prim_program import PrimProgram
+from interface.core.base_program import BaseProgram
+from interface.sub.bfs_program import BFSProgram
+from interface.sub.dfs_program import DFSProgram
+from interface.sub.dijkstra_program import DijkstraProgram
+from interface.sub.kruskal_program import KruskalProgram
+from interface.sub.prim_program import PrimProgram
 from interface.contents import content_dictionary
 
 class MainProgram(BaseProgram):
