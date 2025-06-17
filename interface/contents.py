@@ -37,6 +37,15 @@ KRUSKAL_MENU = """
 \t  5. Back to main menu
 """
 
+PRIM_MENU = """
+\tPlease input an option number below:
+\t  1. Create new vertex
+\t  2. Create new edge
+\t  3. Create reserved graph
+\t  4. Run Prim search on graph
+\t  5. Back to main menu
+"""
+
 DIJKSTRA_MENU = """
 \tPlease input an option number below:
 \t  1. Create new vertex
@@ -67,9 +76,14 @@ content_dictionary = {
         'body': KRUSKAL_MENU
     },
 
+    'prim': {
+        'title': " KRUSKAL SEARCH ",
+        'body': PRIM_MENU
+    },
+
     'dijkstra': {
         'title': " DIJKSTRA SEARCH",
-        'body': DFS_MENU
+        'body': DIJKSTRA_MENU
     }
 }
 
