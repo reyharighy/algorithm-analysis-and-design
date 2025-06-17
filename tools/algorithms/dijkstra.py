@@ -54,6 +54,6 @@ class DijkstraSearch(Graph):
 
         return min_vertex
 
-    def get_vertices(self):
+    def get_vertices(self) -> list[Vertex]:
         """Returns the list of vertices in the graph."""
         return self._get_vertices()

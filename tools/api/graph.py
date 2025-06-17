@@ -24,6 +24,8 @@ class Graph:
                     vertices += vertex.definition('bfs')
                 case 'dfs':
                     vertices += vertex.definition('dfs')
+                case 'kruskal':
+                    vertices += vertex.definition('kruskal')
                 case 'dijkstra':
                     vertices += vertex.definition('dijkstra')
 
@@ -64,7 +66,7 @@ class Graph:
 
         if isinstance(weight, tuple) and len(weight) == 2 and weight[0] > 0 and weight[1] > 0:
             from_src = Edge(source, destination, weight[0])
-            from_dest = Edge(destination, source, weight[1])
+            from_dest = Edge(destination, source, weight[-1])
             destination.add_edge(from_dest)
 
         if isinstance(from_src, Edge):
@@ -154,11 +156,13 @@ class Graph:
         }
 
         for source_label, destination_labels in edge_dictionary.items():
-            source = Vertex(source_label)
+            source = self.get_vertex(source_label)
 
             for label, weight in destination_labels:
-                destination = Vertex(label)
-                self.add_edge(source, destination, (weight, weight))
+                destination = self.get_vertex(label)
+
+                if source and destination:
+                    self.add_edge(source, destination, (weight, weight))
 
     def __create_graph_task_3(self):
         """Creates a graph for task 3 with weighted edges for Dijkstra."""

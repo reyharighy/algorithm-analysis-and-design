@@ -21,6 +21,11 @@ class External:
     valid: bool = False
 
 @dataclass
+class MSTProcess:
+    """A class to provide context indicating if a graph is already run."""
+    run: bool = False
+
+@dataclass
 class EdgeProcess:
     """A class to provide context dedicated to a process of defining the edge's weight."""
     two_direction: bool = False
@@ -40,6 +45,7 @@ class BaseProgram:
         self._base: Base = Base()
         self._extrn: External = External()
         self._edg: EdgeProcess = EdgeProcess()
+        self._mst: MSTProcess = MSTProcess()
 
     def start(self):
         """Not implemented."""
@@ -159,3 +165,7 @@ class BaseProgram:
         self._edg.first_weight = False
         self._edg.second_weight = False
         self._edg.weight_list = []
+
+    def _reset_mst_contexts(self):
+        """Resets MST contexts to default after running algorithms."""
+        self._mst.run = False

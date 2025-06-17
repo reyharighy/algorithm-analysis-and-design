@@ -30,6 +30,7 @@ class MainProgram(BaseProgram):
             case 3:
                 self.__running_program = KruskalProgram()
                 self.__cycle()
+                return
             case 4:
                 pass
             case 5:

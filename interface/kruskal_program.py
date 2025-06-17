@@ -1,7 +1,7 @@
 """Module to simulate user interaction with Kruskal algorithm"""
 
 from interface.base_program import BaseProgram
-from interface.contents import content_dictionary, subcontent_dictionary
+from interface.contents import content_dictionary
 from tools.algorithms.kruskal import KruskalSearch
 from tools.api.object import Vertex
 
@@ -39,6 +39,7 @@ class KruskalProgram(BaseProgram):
                 return
             case 5:
                 self._extrn.resume = False
+                self._reset_graph_contexts()
                 return
             case None:
                 self._base.message = "Invalid: Input must not be empty"
@@ -49,14 +50,34 @@ class KruskalProgram(BaseProgram):
 
         self._append_error_message(self._base.message)
 
+    def __run_graph(self, run: bool) -> str:
+        """Defines established tree after running the graph."""
+        run_graph = self.__kruskal.definition("kruskal")
+
+        if run:
+            tree = self.__kruskal.get_trees()[0]
+
+            run_graph += "\n\tMinimum Spanning Tree:"
+            run_graph += f"\n\t  - {tree}" + '\n'
+            run_graph += "\n\tTotal Weight:"
+
+            total_weight = 0
+
+            for edge in self.__kruskal.get_trees()[0]:
+                total_weight += edge.get_weight()
+
+            run_graph += f"\n\t  - {total_weight}" + '\n'
+
+        return run_graph
+
     def start(self):
         """A section to start the Kruskal program."""
         content = content_dictionary['kruskal']
         title: str = content['title']
-        body: str = content['body']
 
         while self._extrn.resume:
-            self._refresh_display(title, self.__kruskal.definition('kruskal') + body)
+            body: str = self.__run_graph(self._graph.run) + content['body']
+            self._refresh_display(title, body)
             self.__execute_process()
 
     def save_exit(self):
@@ -90,14 +111,6 @@ class KruskalProgram(BaseProgram):
             self._refresh_display(title, self.__kruskal.definition('kruskal'))
             self.__vertex_creation_process()
 
-    def __edge_complement_exists(self, source: Vertex, destination: Vertex) -> bool:
-        """Checkes if there's a complement of such edge."""
-        for edge in destination.get_edges():
-            if edge.get_destination() is source:
-                return True
-
-        return False
-
     def __edge_content(self, src: Vertex | None, dest: Vertex | None) -> str:
         """Provides contens when operation with an edge."""
         body: str = self.__kruskal.definition('kruskal')
@@ -118,13 +131,13 @@ class KruskalProgram(BaseProgram):
 
         return body
 
-    def __edge_creation_content(self, src: Vertex | None, dest: Vertex | None, valid: bool) -> str:
+    def __edge_creation_content(
+            self,
+            src: Vertex | None,
+            dest: Vertex | None,
+        ) -> str:
         """Provides a customized content when adding a new edge."""
         body = self.__edge_content(src, dest)
-
-        if isinstance(src, Vertex) and isinstance(dest, Vertex) and valid:
-            if not self.__edge_complement_exists(src, dest):
-                body += subcontent_dictionary['two_direction_edge']
 
         return body
 
@@ -162,48 +175,61 @@ class KruskalProgram(BaseProgram):
 
         return False
 
-    def __edge_creation_session(self, source: Vertex, destination: Vertex, two_direction: bool):
+    def __edge_creation_session(
+            self,
+            src: Vertex,
+            dest: Vertex,
+            two_direction_ctx: bool,
+            weight_list: list[int]
+        ):
         """Provides a session when creating an edge."""
-        if two_direction:
-            edge_label_1 = f"Edge({source.get_label()}, {destination.get_label()})"
-            edge_label_2 = f"Edge({destination.get_label()}, {source.get_label()})"
+        self._extrn.resume = False
+
+        if two_direction_ctx:
+            self.__kruskal.add_edge(src, dest, (weight_list[0], weight_list[-1]))
+            edge_label_1 = f"Edge({src.get_label()}, {dest.get_label()}, {weight_list[0]})"
+            edge_label_2 = f"Edge({dest.get_label()}, {src.get_label()}, {weight_list[-1]})"
             edge_label = f"{edge_label_1} and {edge_label_2}"
             self._append_success_message(f"{edge_label} have successfully been created")
             return
 
-        edge_label = f"Edge({source.get_label()}, {destination.get_label()})"
+        self.__kruskal.add_edge(src, dest, weight_list[0])
+        edge_label = f"Edge({src.get_label()}, {dest.get_label()}, {weight_list[0]})"
         self._append_success_message(f"{edge_label} has successfully been created")
 
-    def __edge_creation_process(self, source: Vertex, destination: Vertex):
-        """Executes a process of creating an edge upon successful validation."""
-        if self.__edge_complement_exists(source, destination):
-            self.__kruskal.add_edge(source, destination)
-            self._extrn.resume = False
-            self.__edge_creation_session(source, destination, self._edg.two_direction)
-            return
+    def __validate_weight(self, label: str):
+        """Simulate a process to validate the first undefined weight."""
+        try:
+            weight_input = int(input(f"Enter weight for {label}: "))
+            self._loading()
 
-        option_input = self._option_entry_handler()
-
-        match option_input:
-            case 1:
-                self.__kruskal.add_edge(source, destination)
-                self._extrn.resume = False
-                self.__edge_creation_session(source, destination, self._edg.two_direction)
+            if weight_input < 1:
+                self._base.message = "Invalid: Only accepts weight greater than zero"
+                self._append_error_message(self._base.message)
                 return
-            case 2:
-                self.__kruskal.add_edge(source, destination, (1, 1))
-                self._edg.two_direction = True
-                self._extrn.resume = False
-                self.__edge_creation_session(source, destination, self._edg.two_direction)
-                return
-            case None:
-                self._base.message = "Invalid: Input must not be empty"
-            case -1:
-                self._base.message = "Invalid: Only accept numeric type"
-            case _:
-                self._base.message = f"Invalid: No option number {option_input}"
 
-        self._append_error_message(self._base.message)
+            self._edg.weight_list.append(weight_input)
+            self._base.message = f"Weight for {label} are set to {weight_input}"
+            self._append_success_message(self._base.message)
+        except ValueError:
+            self._base.message = "Invalid: Only accepts numerics without spaces in between"
+            self._append_error_message(self._base.message)
+
+    def __weight_definition_process(
+            self,
+            src: Vertex,
+            dest: Vertex,
+            label: str
+        ):
+        """Simulate a process of defining weights of an edge."""
+        self.__validate_weight(label)
+
+        self.__edge_creation_session(
+            src=src,
+            dest=dest,
+            two_direction_ctx=self._edg.two_direction,
+            weight_list=self._edg.weight_list
+        )
 
     def __create_edge(self):
         """Simulates a process of adding a new edge."""
@@ -216,7 +242,11 @@ class KruskalProgram(BaseProgram):
         destination: Vertex | None = None
 
         while self._extrn.resume:
-            body = self.__edge_creation_content(source, destination, self._extrn.valid)
+            body = self.__edge_creation_content(
+                src=source,
+                dest=destination,
+            )
+
             self._refresh_display(title, body)
 
             if source is None:
@@ -228,8 +258,16 @@ class KruskalProgram(BaseProgram):
             elif source and destination and not self._extrn.valid:
                 self._extrn.valid = not self.__edge_exists(source, destination)
 
-            elif self._extrn.valid:
-                self.__edge_creation_process(source, destination)
+            elif self._extrn.valid and not self._edg.weight:
+                self._edg.two_direction = True
+                edge_label = f"Edge({source.get_label()}, {destination.get_label()})"
+                edge_label += f" and Edge({destination.get_label()}, {source.get_label()})"
+
+                self.__weight_definition_process(
+                    src=source,
+                    dest=destination,
+                    label=edge_label
+                )
 
     def __check_edges(self) -> bool:
         """Checks if graph has a vertex that has at least one edge."""
@@ -246,14 +284,9 @@ class KruskalProgram(BaseProgram):
             return
 
         title: str = " RUN KRUSKAL SEARCH "
-        start: Vertex | None = None
 
         while self._extrn.resume:
             self._refresh_display(title, self.__kruskal.definition("kruskal"))
-
-            if start is None:
-                start = self.__vertex_retrieval_session("start")
-
-            elif isinstance(start, Vertex):
-                self.__kruskal.run(start)
-                self._extrn.resume = False
+            self.__kruskal.run()
+            self._graph.run = True
+            self._extrn.resume = False

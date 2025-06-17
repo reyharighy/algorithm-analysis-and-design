@@ -171,14 +171,24 @@ class Edge:
         self.__destination = destination
         self.__special_attributes: SpecialEdgeAttributes = SpecialEdgeAttributes(weight)
 
-    def definition(self, algorithm: str) -> str:
+    def __repr__(self) -> str:
         """Returns a string representation of the edge."""
+        s = f"Edge({self.__source.get_label()}"
+        s += f", {self.__destination.get_label()}"
+        s += f", {self.get_weight()})"
+
+        return s
+
+    def definition(self, algorithm: str) -> str:
+        """Returns the definition of the edge."""
         s = f"Edge({self.__source.get_label()}"
         s += f", {self.__destination.get_label()}"
 
         match algorithm:
             case 'dfs':
                 s += f", {self.get_classification()}"
+            case "kruskal":
+                s += f", {self.get_weight()}"
             case 'dijkstra':
                 s += f", {self.get_weight()}"
 

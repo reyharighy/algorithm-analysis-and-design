@@ -22,11 +22,3 @@ class DijkstraVertexType(TypedDict, total=False):
     """A TypedDict for Dijkstra vertex attributes."""
     predecessor: 'Vertex | None'
     distance: int | float
-
-class PrimVertexType(TypedDict, total=False):
-    """A TypedDict for Prim's algorithm vertex attributes."""
-    key: int | float
-
-class KruskalVertexType(TypedDict, total=False):
-    """A TypedDict for Kruskal's algorithm vertex attributes."""
-    rank: int

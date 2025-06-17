@@ -53,6 +53,6 @@ class DepthFirstSearch(Graph):
         self.__time += 1
         vertex.update_dfs_attributes(color='blue', finish_time=self.__time)
 
-    def get_vertices(self):
+    def get_vertices(self) -> list[Vertex]:
         """Returns the list of vertices in the graph."""
         return self._get_vertices()
