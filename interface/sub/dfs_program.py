@@ -34,10 +34,13 @@ class DFSProgram(BaseProgram):
                 self._append_success_message("Graph has successfully been created")
                 return
             case 4:
+                self.__dfs.visualize()
+                return
+            case 5:
                 self.__run()
                 self._reset_external_contexts()
                 return
-            case 5:
+            case 6:
                 self._extrn.resume = False
                 return
             case None:
