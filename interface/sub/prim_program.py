@@ -34,10 +34,13 @@ class PrimProgram(BaseProgram):
                 self._append_success_message("Graph has successfully been created")
                 return
             case 4:
+                self.__prim.visualize()
+                return
+            case 5:
                 self.__run()
                 self._reset_external_contexts()
                 return
-            case 5:
+            case 6:
                 self._extrn.resume = False
                 return
             case None:
@@ -75,7 +78,7 @@ class PrimProgram(BaseProgram):
         title: str = content['title']
 
         while self._extrn.resume:
-            body: str = self.__run_graph(self._mst.run) + content['body']
+            body: str = self.__run_graph(self._grph.run) + content['body']
             self._refresh_display(title, body)
             self.__execute_process()
 
@@ -293,5 +296,5 @@ class PrimProgram(BaseProgram):
 
             elif isinstance(start, Vertex):
                 self.__prim.run(start)
-                self._mst.run = True
+                self._grph.run = True
                 self._extrn.resume = False
