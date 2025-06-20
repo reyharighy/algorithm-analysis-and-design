@@ -6,7 +6,7 @@ import networkx as nx
 from networkx import DiGraph
 
 from tools.api.graph import Graph
-from tools.api.object import Vertex
+from tools.api.object import Vertex, Edge
 
 class DepthFirstSearch(Graph):
     """A class to perform depth-first search on a graph."""
@@ -22,13 +22,15 @@ class DepthFirstSearch(Graph):
             graph: DiGraph,
             vertex: Vertex,
             labels: dict[Vertex, str],
-            colors: dict[Vertex, str]
+            colors: dict[Vertex, str],
+            edge_labels: dict[tuple[Vertex, Vertex], str]    
         ):
         """Performs processes of adding a node and an edge to graph visualization."""
         graph.add_node(vertex, distance=vertex.get_distance())
 
         for edge in vertex.get_edges():
-            graph.add_edge(vertex, edge.get_destination())
+            graph.add_edge(vertex, edge.get_destination(), classification=edge.get_classification())
+            edge_labels[(vertex, edge.get_destination())] = str(edge.get_classification())
 
         dis_fin_time = str(vertex.get_discovery_time()) + '/' + str(vertex.get_finish_time())
         labels[vertex] = str(vertex.get_label()) + "\n" + dis_fin_time
@@ -41,13 +43,14 @@ class DepthFirstSearch(Graph):
         graph: DiGraph = DiGraph()
         labels: dict[Vertex, str] = {}
         colors: dict[Vertex, str] = {}
+        edge_labels: dict[tuple[Vertex, Vertex], str] = {}
 
         for vertex in self.get_vertices():
             if self.__is_run:
                 if vertex.get_predecessor() or vertex is self.__start:
-                    self.__add_to_graph(graph, vertex, labels,colors)
+                    self.__add_to_graph(graph, vertex, labels, colors, edge_labels)
             else:
-                self.__add_to_graph(graph, vertex, labels,colors)
+                self.__add_to_graph(graph, vertex, labels, colors, edge_labels)
 
         pos = nx.kamada_kawai_layout(graph)
 
@@ -72,6 +75,11 @@ class DepthFirstSearch(Graph):
             labels=labels,
             font_size=10,
             font_family='sans-serif'
+        )
+
+        nx.draw_networkx_edge_labels(
+            graph, pos,
+            edge_labels=edge_labels
         )
 
         plt.axis("off")
