@@ -80,13 +80,13 @@ class Graph:
             match algorithm:
                 case 'bfs':
                     vertex.update_bfs_attributes(
-                        color="white",
+                        color="gray",
                         predecessor=None,
                         distance=float('inf')
                     )
                 case 'dfs':
                     vertex.update_dfs_attributes(
-                        color="white",
+                        color="gray",
                         predecessor=None,
                         discovery_time=0,
                         finish_time=0
@@ -126,7 +126,7 @@ class Graph:
             'F': ['J'],
             'G': [],
             'H': ['G'],
-            'I': ['G', 'H'],
+            'I': ['H', 'G'],
             'J': [],
         }
 

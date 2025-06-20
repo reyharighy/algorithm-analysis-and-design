@@ -9,7 +9,7 @@ from helper.edge_types import DFSEdgeType
 @dataclass
 class SpecialVertexAttributes:
     """A dataclass that specifies attributes when working with the vertex."""
-    color: str = "white"
+    color: str = "gray"
     predecessor: 'Vertex | None' = None
     distance: int | float = float('inf')
     discovery_time: int = 0
@@ -30,9 +30,7 @@ class Vertex:
 
     def definition(self, algorithm: str) -> str:
         """Returns the definition of the vertex."""
-        vertex = ''
-
-        vertex += f"Vertex({{label: {self.get_label()}"
+        vertex = f"Vertex({{label: {self.get_label()}"
 
         match algorithm:
             case 'bfs':

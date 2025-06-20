@@ -75,7 +75,7 @@ class KruskalProgram(BaseProgram):
         title: str = content['title']
 
         while self._extrn.resume:
-            body: str = self.__run_graph(self._mst.run) + content['body']
+            body: str = self.__run_graph(self._grph.run) + content['body']
             self._refresh_display(title, body)
             self.__execute_process()
 
@@ -287,5 +287,5 @@ class KruskalProgram(BaseProgram):
         while self._extrn.resume:
             self._refresh_display(title, self.__kruskal.definition("kruskal"))
             self.__kruskal.run()
-            self._mst.run = True
+            self._grph.run = True
             self._extrn.resume = False

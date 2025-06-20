@@ -21,7 +21,7 @@ class External:
     valid: bool = False
 
 @dataclass
-class MSTProcess:
+class GraphProcess:
     """A class to provide context indicating if a graph is already run."""
     run: bool = False
 
@@ -45,7 +45,7 @@ class BaseProgram:
         self._base: Base = Base()
         self._extrn: External = External()
         self._edg: EdgeProcess = EdgeProcess()
-        self._mst: MSTProcess = MSTProcess()
+        self._grph: GraphProcess = GraphProcess()
 
     def start(self):
         """Not implemented."""
@@ -166,6 +166,6 @@ class BaseProgram:
         self._edg.second_weight = False
         self._edg.weight_list = []
 
-    def _reset_mst_contexts(self):
+    def _reset_graph_contexts(self):
         """Resets MST contexts to default after running algorithms."""
-        self._mst.run = False
+        self._grph.run = False

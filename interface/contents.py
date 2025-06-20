@@ -15,8 +15,9 @@ BFS_MENU = """
 \t  1. Create new vertex
 \t  2. Create new edge
 \t  3. Create reserved graph
-\t  4. Run BFS on graph
-\t  5. Back to main menu
+\t  4. Visualize graph
+\t  5. Run BFS on graph
+\t  6. Back to main menu
 """
 
 DFS_MENU = """
