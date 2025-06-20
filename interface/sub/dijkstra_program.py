@@ -30,14 +30,17 @@ class DijkstraProgram(BaseProgram):
                 self._reset_external_contexts()
                 return
             case 3:
-                self.__dijkstra.create_graph_from_problem_statement(3)
+                self.__dijkstra.create_graph_from_problem_statement(1)
                 self._append_success_message("Graph has successfully been created")
                 return
             case 4:
+                self.__dijkstra.visualize()
+                return
+            case 5:
                 self.__run()
                 self._reset_external_contexts()
                 return
-            case 5:
+            case 6:
                 self._extrn.resume = False
                 return
             case None:
