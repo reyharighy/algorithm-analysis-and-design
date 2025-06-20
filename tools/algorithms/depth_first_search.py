@@ -6,7 +6,7 @@ import networkx as nx
 from networkx import DiGraph
 
 from tools.api.graph import Graph
-from tools.api.object import Vertex, Edge
+from tools.api.object import Vertex
 
 class DepthFirstSearch(Graph):
     """A class to perform depth-first search on a graph."""
@@ -23,7 +23,7 @@ class DepthFirstSearch(Graph):
             vertex: Vertex,
             labels: dict[Vertex, str],
             colors: dict[Vertex, str],
-            edge_labels: dict[tuple[Vertex, Vertex], str]    
+            edge_labels: dict[tuple[Vertex, Vertex], str]
         ):
         """Performs processes of adding a node and an edge to graph visualization."""
         graph.add_node(vertex, distance=vertex.get_distance())
