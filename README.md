@@ -86,7 +86,7 @@ This project streamlines the development of graph-based solutions by offering:
 
 ### Project Index
 
-<details open>
+<details closed>
 	<summary><b><code>ALGORITHM-ANALYSIS-AND-DESIGN/</code></b></summary>
 	<!-- __root__ Submodule -->
 	<details>
